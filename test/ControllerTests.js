@@ -15,4 +15,24 @@ describe('InstrumentController', function(){
 
         });
     });
+
+    describe('#viewInstrument()', function(){
+        it('should render a view with name Instrument', function(){
+
+        });
+        it('should return model with available keys', function(){
+
+        });
+    });
+});
+
+describe('RoomController', function(){
+    describe('#displayInstruments()', function(){
+        it('should return a view that lists all instruments', function(){
+
+        });
+        it('should bind existing instruments as array to model', function(){
+
+        });
+    });
 });
