@@ -24,6 +24,9 @@ describe('InstrumentController', function(){
         it('should listen to key presses for that instrument on connection.', function(){
 
         });
+        it('should subscribe user to broadcast room with name of instrument', function(){
+
+        });
     });
 
     describe('#viewInstrument()', function(){
