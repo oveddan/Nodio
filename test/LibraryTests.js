@@ -18,7 +18,7 @@ describe('InstrumentBroadcaster', function(){
         it('should listen for event listenToInstrument on socket.io connection', function(){
 
         });
-        it('should have socket join with name of instrument when listenToInstrument fired', function(){
+        it('should have socket join room with name of instrument when listenToInstrument fired', function(){
 
         });
     });
