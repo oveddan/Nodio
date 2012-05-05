@@ -31,17 +31,9 @@ app.configure('production', function(){
 });
 
 // Routes
-//app.get('/mytweets', security.ensureAuthenticated, routes.tweetsOfMyUser);
-app.get('/', routes.index);
-// Sockets
-require('./appObserver').listenAndObserve(app);
 
 
 
-
-app.listen(3000, '10.0.3.39', function(){
-  console.log("Express server listening on port %d on address %s in %s mode", app.address().port, app.address().address, app.settings.env);
+app.listen(3000, '127.0.0.1', function(){
+    console.log("Express server listening on port %d in %s mode", app.address().port, app.settings.env);
 });
-//app.listen(3000, '127.0.0.1', function(){
-//    console.log("Express server listening on port %d in %s mode", app.address().port, app.settings.env);
-//});
