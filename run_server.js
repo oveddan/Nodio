@@ -1,1 +1,0 @@
-require('./chapp/server').listen(process.argv[2] || 8000);
