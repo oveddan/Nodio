@@ -1,10 +1,10 @@
 (function(){
     TestCase('InstrumentView', {
-        'test should be Backbone view' : function(){
+        'test should extent Backbone view' : function(){
         }
     });
     TestCase('InstrumentView.initialize()', {
-        'test should bindInstrumentModel' : function(){
+        'test should bindInstrumentModel()' : function(){
         }
     });
     TestCase('InstrumentView.bindInstrumentModel()', {
@@ -22,7 +22,7 @@
 
 (function(){
     TestCase('InstrumentModel', {
-        'should be backbone collection model' : function(){
+        'should extend backbone collection model' : function(){
 
         }
     });
@@ -70,20 +70,49 @@
         }
     });
 
+    TestCase('KeyView.initialize', {
+        "test should call play() when model fires 'play'": function(){
+
+        },
+        "test should grab audio element in view and assign it to 'sound'": function(){
+
+        },
+        "test should grab key name in view and assign it to 'keyName'" : function(){
+
+        }
+    });
+
     TestCase('KeyView.events', {
        'test should call pressKey() when key button clicked' : function(){
        }
     });
 
     TestCase('KeyView.pressKey()' ,{
-       'test should trigger keyPressed event with key name' : function(){
-
+       'test should call pressKey(this.keyName) on model' : function(){
        }
     });
 
     TestCase('KeyView.play()', {
-        'test should call play() on audio element of view' : function(){
-
+        "test should call play() on 'sound'" : function(){
         }
     });
 }());_
+
+(function(){
+    TestCase('KeyModel', {
+       'test should extend Backbone model': function(){
+
+       }
+    });
+
+    TestCase('KeyModel.play()', {
+       "test should fire 'play' event" : function(){
+
+       }
+    });
+
+    TestCase('KeyModel.pressKey()', {
+       "test should fire 'keyPressed' event with key name": function(){
+       }
+    });
+})
