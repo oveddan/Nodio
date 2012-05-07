@@ -22,6 +22,15 @@ describe('InstrumentBroadcaster', function(){
     describe("#listenForRequestsToHearInstrument()", function(){
         beforeEach(function(){
             this.broadCaster = new InstrumentBroadcaster({});
+            this.spyIoListener = {
+                on : sinon.stub()
+            };
+            sinon.stub(socketio, 'listen').returns(this.spyIoListener);
+            this.spyIoListener.on.withArgs('connection',
+                this.spyIoListener.onConnection);
+        });
+        afterEach(function(){
+            socketio.listen.restore();
         });
         it('should ensureSocketListening()', function(){
             this.broadCaster.ensureSocketListening = sinon.spy();
@@ -33,7 +42,10 @@ describe('InstrumentBroadcaster', function(){
 
         });
         it('should listen for event listenToInstrument on socket.io connection', function(){
-
+            // test
+            this.broadCaster.listenForRequestsToHearInstrument();
+            // assert
+            this.spyIoListener.on.calledWith('connection', this.spyIoListener.onConnection);
         });
         it('should have socket join room with name of instrument when listenToInstrument fired', function(){
 
