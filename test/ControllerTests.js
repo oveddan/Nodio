@@ -16,16 +16,6 @@ describe('InstrumentController', function(){
         });
     });
 
-
-    describe('#listenForSubscriptions()', function(){
-        it('should listen for connections', function(){
-
-        });
-        it('should listen to key presses for that instrument on connection.', function(){
-
-        });
-    });
-
     describe('#viewInstrument()', function(){
         it('should render a view with name Instrument', function(){
 

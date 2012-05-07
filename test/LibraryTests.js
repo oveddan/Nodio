@@ -8,11 +8,11 @@ describe('InstrumentBroadcaster', function(){
         });
     });
 
-    describe("#listenForRequestsToHearInstrument", function(){
+    describe("#listenForRequestsToHearInstrument()", function(){
         it('should ensureSocketListening()', function(){
 
         });
-        it('should wait for socket.io on connection', function(){
+        it('should wait for socket.io connection', function(){
 
         });
         it('should listen for event listenToInstrument on socket.io connection', function(){
