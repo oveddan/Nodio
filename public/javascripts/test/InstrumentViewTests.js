@@ -1,0 +1,5 @@
+(function(){
+    TestCase('InstrumentViewTest', function(){
+
+    });
+})
