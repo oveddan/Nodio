@@ -63,7 +63,14 @@ describe('InstrumentBroadcaster', function(){
             expect(this.broadCaster.socket).to.equal(socket);
         });
         it('should preserve original socket if socket it not null', function(){
+            // setup
+            var originalSocket = this.broadCaster.socket = {a : 5};
 
+            // test
+            this.broadCaster.ensureSocketListening();
+
+            // assert
+            expect(originalSocket).to.equal(originalSocket);
         });
     })
 });
