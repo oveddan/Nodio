@@ -4,6 +4,10 @@ var assert = require('chai').assert,
     sinon = require('sinon');
 
 describe('InstrumentController', function(){
+    if('should throw error if not called via constructor', function(){
+
+    });
+
     describe('#constructor(broadcaster)', function(){
         it('should keep copy of broadcaster', function(){
 
@@ -26,7 +30,12 @@ describe('InstrumentController', function(){
     });
 });
 
-describe('RoomController', function(){
+describe('InstrumentListController', function(){
+    describe('home()', function(){
+        it('should return home view', function(){
+
+        });
+    });
     describe('#displayInstruments()', function(){
         it('should return a view that lists all instruments', function(){
 
