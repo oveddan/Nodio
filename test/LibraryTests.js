@@ -48,29 +48,31 @@ describe('InstrumentBroadcaster', function(){
         });
         afterEach(function(){
             socketio.listen.restore();
-        })
+        });
         it('should load and listen to socket if socket is null', function(){
             // setup
-            this.broadCaster.socket = null;
-            var socket = {b : 6};
+            this.broadCaster.ioListener = null;
+            var ioListener = {b : 6};
 
-            this.listenStub.withArgs(this.app).returns(socket);
+            this.listenStub.withArgs(this.app).returns(ioListener);
 
             // test
             this.broadCaster.ensureSocketListening();
             // assert
             expect(this.listenStub.calledWith(this.app)).is.true;
-            expect(this.broadCaster.socket).to.equal(socket);
+            expect(this.broadCaster.ioListener).to.equal(ioListener);
         });
         it('should preserve original socket if socket it not null', function(){
             // setup
-            var originalSocket = this.broadCaster.socket = {a : 5};
+            var originalListener = this.broadCaster.ioListener  = {a : 5};
+            var newListener = {d: 7};
+            this.listenStub.withArgs(this.app).returns(newListener);
 
             // test
             this.broadCaster.ensureSocketListening();
 
             // assert
-            expect(originalSocket).to.equal(originalSocket);
+            expect(originalListener).to.equal(this.broadCaster.ioListener);
         });
     })
 });
