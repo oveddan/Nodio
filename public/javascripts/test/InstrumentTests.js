@@ -22,15 +22,27 @@
 
 (function(){
     TestCase('InstrumentModel', {
-        'test should contain keys' : function(){
+        'should be backbone collection model' : function(){
 
         }
     });
 
     TestCase('InstrumentModel.initialize()', {
-        'test should listenForKeyPresses()' : function(){
+        "test should listenForKeyPress(keyModel) on 'add'" : function(){
         },
         'test shouldListenToInstrument()' : function(){
+        }
+    });
+
+    TestCase('InstrumentModel.listenForKeyPress(keyModel)', {
+       "test should invoke keyPressed(name) when keyModel triggers 'keyPressed'" : function(){
+
+       }
+    });
+
+    TestCase('InstrumentModel.keyPressed(name)', {
+        "test should emit 'keyPressed' with name on contained socket" : function(){
+
         }
     });
 
@@ -64,7 +76,7 @@
     });
 
     TestCase('KeyView.pressKey()' ,{
-       'test should fire keyPressedEvent with key name on InstrumentView' : function(){
+       'test should trigger keyPressed event with key name' : function(){
 
        }
     });
