@@ -44,6 +44,8 @@
                     {el : elementsWithKey[i]}
                 )).to.be.true;
             }
+
+            NODIO.KeyView.restore();
         },
         "test should create and contain instrument model containing all key models": function(){
 
