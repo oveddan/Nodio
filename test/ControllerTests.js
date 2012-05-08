@@ -74,6 +74,7 @@ describe('InstrumentController', function(){
             res.render.calledOnce.should.be.ok;
             res.render.firstCall.args[0].should.equal('Instrument');
         });
+        // V2: (for keys will be hardcoded in the view)
         it('should return model with available keys', function(){
 
         });
