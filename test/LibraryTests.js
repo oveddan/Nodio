@@ -23,11 +23,9 @@ describe('InstrumentBroadcaster', function(){
     describe("#listenForRequestsToHearInstrument()", function(){
         beforeEach(function(){
             this.broadCaster = new InstrumentBroadcaster({});
-            this.spyIoListener = {
-                on : sinon.stub()
+            this.broadCaster.ioListener = {
+              on : sinon.spy()
             };
-        });
-        afterEach(function(){
         });
         it('should ensureSocketListening()', function(){
             this.broadCaster.ensureSocketListening = sinon.spy();
@@ -36,19 +34,16 @@ describe('InstrumentBroadcaster', function(){
             expect(this.broadCaster.ensureSocketListening.called).to.be.ok;
         });
         it('should listen for event listenToInstrument on socket.io connection', function(){
-            sinon.stub(socketio, 'listen').returns(this.spyIoListener);
-            this.spyIoListener.on.withArgs('connection',
-                this.spyIoListener.onConnection);
             // test
             this.broadCaster.listenForRequestsToHearInstrument();
             // assert
-            expect(this.spyIoListener.on.called).to.be.true;
-            expect(this.spyIoListener.on.args[0][0]).to.equal('connection');
-            expect(this.spyIoListener.on.args[0][1]).to.equal(this.broadCaster.onConnection);
-
-
-            socketio.listen.restore();
+            expect(this.broadCaster.ioListener.on.called).to.be.true;
+            expect(this.broadCaster.ioListener.on.args[0][0]).to.equal('connection');
+            expect(this.broadCaster.ioListener.on.args[0][1]).to.equal(this.broadCaster.onConnection);
         });
+    });
+
+    describe('#onConnection(socket)', function(){
         it('should have socket join room with name of instrument when listenToInstrument fired', function(){
             // setup
             var socket = {
@@ -65,7 +60,7 @@ describe('InstrumentBroadcaster', function(){
             // get function that was passed as second argument to 'on' and invoke it
             var listenToInstrumentCallback = spyForInstrument.args[0][1];
             expect(listenToInstrumentCallback).to.exist;
-            listenToInstrumentCallback.call(socket, data);;
+            listenToInstrumentCallback.call(socket, data);
 
             // assert
             expect(socket.join.calledWith(data.instrumentName)).to.be.true;
