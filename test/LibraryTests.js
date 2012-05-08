@@ -1,6 +1,5 @@
 var InstrumentBroadcaster = require('../lib/Utils').InstrumentBroadcaster,
     expect = require('chai').expect,
-    should = require('chai').should,
     sinon = require('sinon'),
     socketio = require('socket.io');
 
@@ -50,8 +49,6 @@ describe('InstrumentBroadcaster', function(){
                 on : sinon.stub(),
                 join : sinon.spy()
             };
-            var data = { instrumentName : 'thirdPiano' };
-
             var spyForInstrument = socket.on.withArgs('listenToInstrument');
 
             // test
@@ -60,7 +57,9 @@ describe('InstrumentBroadcaster', function(){
             // get function that was passed as second argument to 'on' and invoke it
             var listenToInstrumentCallback = spyForInstrument.args[0][1];
             expect(listenToInstrumentCallback).to.exist;
+            var data = { instrumentName : 'thirdPiano' };
             listenToInstrumentCallback.call(socket, data);
+            // end test
 
             // assert
             expect(socket.join.calledWith(data.instrumentName)).to.be.true;
