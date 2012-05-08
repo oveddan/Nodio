@@ -8,7 +8,7 @@ var assert = require('chai').assert,
 describe('InstrumentController', function(){
     if('should be required to be created via constructor', function(){
         var a = InstrumentController({}, function(error){
-            expect(null).to.not.be.ok;
+            expect(error).to.be.ok;
             done();
         });
     });
