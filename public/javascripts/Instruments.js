@@ -1,7 +1,7 @@
 var NODIO = NODIO || {};
 
-(function(View){
-    NODIO.InstrumentView = View.extend({
+(function($, Backbone){
+    NODIO.InstrumentView = Backbone.View.extend({
         initialize : function(){
             if(!this.el)
                 throw('must bind dom element to property el in constructor');
@@ -12,13 +12,19 @@ var NODIO = NODIO || {};
             for(var i = 0, max = views.length; i < max; i++){
                 var keyView = new NODIO.KeyView({el : views[i]});
             }
+
+            this.collection = new NODIO.InstrumentModel();
         }
     });
 
-    NODIO.KeyView = View.extend({
+    NODIO.InstrumentModel = Backbone.Collection.extend({
+
+    });
+
+    NODIO.KeyView = Backbone.View.extend({
 
     });
 
 
-}(Backbone.View));
+}(jQuery, Backbone));
 

@@ -47,7 +47,16 @@
 
             NODIO.KeyView.restore();
         },
-        "test should create and contain instrument model containing all key models": function(){
+        "test should create and contain instrument collection model containing all key models": function(){
+            // assert
+            NODIO.InstrumentModel = sinon.stub();
+            var expectedModel = {a : 'b'};
+            NODIO.InstrumentModel.returns(expectedModel);
+
+            // test
+            var instrumentView = new NODIO.InstrumentView({el : this.element});
+
+            expect(instrumentView.collection).to.eql(expectedModel);
 
         },
         "test should create instrument model with name from data('name') from view": function(){
