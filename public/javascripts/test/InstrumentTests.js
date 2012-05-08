@@ -1,15 +1,52 @@
 (function(){
     TestCase('InstrumentView', {
         'test should extent Backbone view' : function(){
-        }
-    });
-    TestCase('InstrumentView.initialize()', {
-        'test should bindInstrumentModel()' : function(){
-        }
-    });
-    TestCase('InstrumentView.bindInstrumentModel()', {
-        "test should create key views from all elements in view with class='key'" : function(){
 
+        }
+    });
+    TestCase('InstrumentView({el : instrumentElement})', {
+        //'test should throw error if el is null' : function(){
+            //var view = new NODIO.InstrumentView({el : 'a'});
+        //},
+        'test should throw error if el is not dom element' : function(){
+            expect(function(){
+                var view = new NODIO.InstrumentView({el : 'a'});
+            }).to.throwError();
+        },
+        'test should bindInstrumentModel()' : function(){
+            // setup
+            NODIO.InstrumentView.bindInstrumentModel = sinon.spy();
+
+            // test
+            var instrumentView = new NODIO.InstrumentView({el : document.createElement('a')});
+
+            // assert
+            expect(NODIO.InstrumentView.bindInstrumentModel.called).to.be.ok;
+        }
+    });
+
+    TestCase('InstrumentView.bindInstrumentModel()', {
+        setUp : function(){
+            /*:DOC element = <ul data-name='piano'>
+                <li class='key'>a</li>
+                <li class='notKey'>b</li>
+                <li class='key'>c</li>
+                <li class='key'>d</li>
+            </ul>  */
+        },
+        "test should create key views from all elements in view with class='key'" : function(){
+            sinon.spy(NODIO, "KeyView");
+
+            var instrumentView = new NODIO.InstrumentView({el : this.element});
+
+            var elementsWithKey = $(this.element).find('.key');
+
+            expect(NODIO.KeyView.callCount).to.be(elementsWithKey.length);
+            for(var i = 0; i < elementsWithKey.length; i++){
+                expect(NODIO.KeyView.calledWith(
+                    {el : elementsWithKey[i]}
+                )).to.be.true;
+            }
         },
         "test should create and contain instrument model containing all key models": function(){
 
