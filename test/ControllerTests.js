@@ -74,6 +74,16 @@ describe('InstrumentController', function(){
             res.render.calledOnce.should.be.ok;
             res.render.firstCall.args[0].should.equal('Instrument');
         });
+        it('should return model with instrument name', function(){
+            var res = {
+                render : sinon.spy()
+            };
+            // test
+            InstrumentController.viewInstrument('guitar', res);
+
+            res.render.calledOnce.should.be.ok;
+            res.render.firstCall.args[1].should.eql({instrumentName : 'guitar'});
+        });
         // V2: (for keys will be hardcoded in the view)
         it('should return model with available keys', function(){
 

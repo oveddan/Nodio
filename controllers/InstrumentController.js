@@ -10,7 +10,7 @@ InstrumentController.prototype.pressKey = function(key, instrumentName){
 };
 
 InstrumentController.viewInstrument = function(instrumentName, res){
-    res.render('Instrument');
+    res.render('Instrument', {instrumentName : instrumentName});
 };
 
 module.exports = InstrumentController;
