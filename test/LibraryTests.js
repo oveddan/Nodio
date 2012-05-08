@@ -38,7 +38,7 @@ describe('InstrumentBroadcaster', function(){
             // assert
             expect(this.broadCaster.ioListener.on.called).to.be.true;
             expect(this.broadCaster.ioListener.on.args[0][0]).to.equal('connection');
-            expect(this.broadCaster.ioListener.on.args[0][1]).to.equal(this.broadCaster.onConnection);
+            expect(this.broadCaster.ioListener.on.args[0][1]).to.equal(InstrumentBroadcaster.onConnection);
         });
     });
 

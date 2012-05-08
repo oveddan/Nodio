@@ -4,7 +4,8 @@
  */
 
 var express = require('express')
-  , routes = require('./routes');
+    , routes = require('./routes')
+    , InstrumentBroadcaster = require('./lib/Utils').InstrumentBroadcaster;
 
 var app = module.exports = express.createServer();
 
@@ -26,6 +27,9 @@ app.configure('development', function(){
 app.configure('production', function(){
   app.use(express.errorHandler());
 });
+
+var broadcaster = new InstrumentBroadcaster(app);
+broadcaster.listenForRequestsToHearInstrument();
 
 // Routes
 
