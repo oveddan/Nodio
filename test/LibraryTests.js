@@ -5,7 +5,7 @@ var InstrumentBroadcaster = require('../lib/Utils').InstrumentBroadcaster,
 
 
 describe('InstrumentBroadcaster', function(){
-    it('should require to be created via constructor', function(done){
+    it('should be required to be created via constructor', function(done){
         var a = InstrumentBroadcaster({}, function(error){
             expect(null).to.not.be.ok;
             done();

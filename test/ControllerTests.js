@@ -1,16 +1,20 @@
 var assert = require('chai').assert,
-    all = require('node-promise').all,
-    Promise = require('node-promise').Promise,
-    sinon = require('sinon');
+    should = require('should'),
+    InstrumentController = require('../controllers/InstrumentController');
 
 describe('InstrumentController', function(){
-    if('should throw error if not called via constructor', function(){
-
+    if('should be required to be created via constructor', function(){
+        var a = InstrumentController({}, function(error){
+            expect(null).to.not.be.ok;
+            done();
+        });
     });
 
     describe('#constructor(broadcaster)', function(){
         it('should keep copy of broadcaster', function(){
-
+            var broadcaster = {a : '7'};
+            var controller = new InstrumentController(broadcaster);
+            controller.broadcaster.should.equal(broadcaster);
         });
     });
 
