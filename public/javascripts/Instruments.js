@@ -4,7 +4,7 @@ var NODIO = NODIO || {};
     NODIO.InstrumentView = View.extend({
         initialize : function(){
             if(!this.el)
-                throw('must bind el on load');
+                throw('must bind dom element to property el in constructor');
             this.bindInstrumentModel();
         },
         bindInstrumentModel : function(){

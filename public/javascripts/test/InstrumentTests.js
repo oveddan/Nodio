@@ -5,9 +5,6 @@
         }
     });
     TestCase('InstrumentView({el : instrumentElement})', {
-        //'test should throw error if el is null' : function(){
-            //var view = new NODIO.InstrumentView({el : 'a'});
-        //},
         'test should throw error if el is not dom element' : function(){
             expect(function(){
                 var view = new NODIO.InstrumentView({el : 'a'});
