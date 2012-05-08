@@ -5,4 +5,8 @@ var InstrumentController = function(broadcaster, callback){
   this.broadcaster = broadcaster;
 };
 
+InstrumentController.prototype.pressKey = function(key, instrumentName){
+  this.broadcaster.sendKeyPressed(key, instrumentName);
+};
+
 module.exports = InstrumentController;

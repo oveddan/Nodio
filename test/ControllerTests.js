@@ -1,6 +1,9 @@
 var assert = require('chai').assert,
     should = require('should'),
-    InstrumentController = require('../controllers/InstrumentController');
+    sinon = require('sinon'),
+    socketio = require('socket.io'),
+    InstrumentController = require('../controllers/InstrumentController'),
+    InstrumentBroadcaster = require('../lib/Utils').InstrumentBroadcaster;
 
 describe('InstrumentController', function(){
     if('should be required to be created via constructor', function(){
@@ -19,8 +22,40 @@ describe('InstrumentController', function(){
     });
 
     describe('#pressKey(key, instrumentName)', function(){
-        it("should fire keyPressed(key) in room for instrumentName on broadcaster", function(){
+        beforeEach(function(){
+            // setup broadcaster
+            var broadcaster = {
+                ensureSocketListening : sinon.spy(),
+                sendKeyPressed : sinon.spy()
+            };
+            // setup controller
+            this.controller = new InstrumentController(broadcaster);
 
+        })
+        it("should call keyPressed(key, instrumentName) on broadcaster", function(){
+            // setup
+            var key = "doh",
+                instrumentName = "piano";
+
+            // test
+            this.controller.pressKey(key, instrumentName);
+
+            // assert
+            this.controller.broadcaster.sendKeyPressed
+                .calledWith(key, instrumentName)
+                .should.be.true;
+        });
+        if('should ensure the socket is listening', function(){
+            // setup
+            var key = "doh",
+                instrumentName = "piano";
+            // test
+            this.controller.pressKey(key, instrumentName);
+
+            // assert
+            this.controller
+                .broadcaster.ensureSocketListening.called
+                .should.be.true;
         });
     });
 
