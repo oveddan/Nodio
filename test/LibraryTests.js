@@ -101,5 +101,32 @@ describe('InstrumentBroadcaster', function(){
             // assert
             expect(originalListener).to.equal(this.broadCaster.ioListener);
         });
-    })
+    });
+
+    describe('#sendKeyPressed(key, instrumentName)', function(){
+        it('should broadcast key in room for instrument', function(){
+            // setup
+            var broadcaster = new InstrumentBroadcaster({});
+            broadcaster.ioListener = {
+                sockets : {
+                    in : sinon.stub()
+                }
+            };
+
+            var instrumentName = 'saxiphone',
+                key = 'so';
+            var emitSpy = sinon.spy();
+            broadcaster.ioListener.sockets
+                .in.withArgs(instrumentName)
+                .returns({
+                    emit : emitSpy
+                });
+
+            // test
+            broadcaster.sendKeyPressed(key, instrumentName);
+
+            // assert
+            emitSpy.calledWith({key : key}).should.be.ok;
+        });
+    });
 });
