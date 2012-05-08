@@ -9,4 +9,8 @@ InstrumentController.prototype.pressKey = function(key, instrumentName){
   this.broadcaster.sendKeyPressed(key, instrumentName);
 };
 
+InstrumentController.viewInstrument = function(instrumentName, res){
+    res.render('Instrument');
+};
+
 module.exports = InstrumentController;

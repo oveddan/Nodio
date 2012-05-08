@@ -31,7 +31,7 @@ describe('InstrumentController', function(){
             // setup controller
             this.controller = new InstrumentController(broadcaster);
 
-        })
+        });
         it("should call keyPressed(key, instrumentName) on broadcaster", function(){
             // setup
             var key = "doh",
@@ -59,9 +59,20 @@ describe('InstrumentController', function(){
         });
     });
 
-    describe('#viewInstrument()', function(){
+    describe('#viewInstrument(instrumentName, res)', function(){
+        beforeEach(function(){
+            // setup controller
+            this.controller = new InstrumentController({});
+        });
         it('should render a view with name Instrument', function(){
+            var res = {
+              render : sinon.spy()
+            };
+            // test
+            InstrumentController.viewInstrument('guitar', res);
 
+            res.render.calledOnce.should.be.ok;
+            res.render.firstCall.args[0].should.equal('Instrument');
         });
         it('should return model with available keys', function(){
 
