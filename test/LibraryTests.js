@@ -4,6 +4,7 @@ var InstrumentBroadcaster = require('../lib/Utils').InstrumentBroadcaster,
     sinon = require('sinon'),
     socketio = require('socket.io');
 
+
 describe('InstrumentBroadcaster', function(){
     it('should require to be created via constructor', function(done){
         var a = InstrumentBroadcaster({}, function(error){
@@ -49,7 +50,25 @@ describe('InstrumentBroadcaster', function(){
             socketio.listen.restore();
         });
         it('should have socket join room with name of instrument when listenToInstrument fired', function(){
+            // setup
+            var socket = {
+                on : sinon.stub(),
+                join : sinon.spy()
+            };
+            var data = { instrumentName : 'thirdPiano' };
 
+            var spyForInstrument = socket.on.withArgs('listenToInstrument');
+
+            // test
+            InstrumentBroadcaster.onConnection(socket);
+
+            // get function that was passed as second argument to 'on' and invoke it
+            var listenToInstrumentCallback = spyForInstrument.args[0][1];
+            expect(listenToInstrumentCallback).to.exist;
+            listenToInstrumentCallback.call(socket, data);;
+
+            // assert
+            expect(socket.join.calledWith(data.instrumentName)).to.be.true;
         });
     });
 
