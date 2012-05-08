@@ -30,13 +30,15 @@
                 <li class='key'>c</li>
                 <li class='key'>d</li>
             </ul>  */
+
+            this.instrumentModel = {a : 'b'};
+            NODIO.InstrumentModel = sinon.stub().returns(this.instrumentModel);
+            NODIO.KeyView = sinon.stub();
         },
         "test should create key views from all elements in view with class='key'" : function(){
-            sinon.spy(NODIO, "KeyView");
+            var elementsWithKey = $(this.element).find('.key');
 
             var instrumentView = new NODIO.InstrumentView({el : this.element});
-
-            var elementsWithKey = $(this.element).find('.key');
 
             expect(NODIO.KeyView.callCount).to.be(elementsWithKey.length);
             for(var i = 0; i < elementsWithKey.length; i++){
@@ -44,22 +46,23 @@
                     {el : elementsWithKey[i]}
                 )).to.be.true;
             }
-
-            NODIO.KeyView.restore();
         },
-        "test should create and contain instrument collection model containing all key models": function(){
-            // assert
-            NODIO.InstrumentModel = sinon.stub();
-            var expectedModel = {a : 'b'};
-            NODIO.InstrumentModel.returns(expectedModel);
-
+        "test should create and contain instrument collection model": function(){
             // test
             var instrumentView = new NODIO.InstrumentView({el : this.element});
 
-            expect(instrumentView.collection).to.eql(expectedModel);
+            expect(instrumentView.collection).to.eql(this.instrumentModel);
+        },
+        "test instrument model should contain model for each key": function(){
+            // setup
+            
 
+            // test
+
+            // assert
         },
         "test should create instrument model with name from data('name') from view": function(){
+
 
         }
     });
