@@ -3,6 +3,9 @@
  * GET home page.
  */
 
-exports.index = function(req, res){
-  res.render('index', { title: 'Express' })
+exports.registerControllerRoutes = function(app, broadcaster){
+  app.get('/:instrumentName', function(req, res){
+     var controller = new InstrumentController(broadcaster);
+      controller.viewInstrument(req.instrumentName);
+  });
 };

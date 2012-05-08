@@ -32,8 +32,7 @@ var broadcaster = new InstrumentBroadcaster(app);
 broadcaster.listenForRequestsToHearInstrument();
 
 // Routes
-
-app.get('/', routes.index);
+routes.registerControllerRoutes(app, broadcaster);
 
 app.listen(3000, function(){
   console.log("Express server listening on port %d in %s mode", app.address().port, app.settings.env);
