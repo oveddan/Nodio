@@ -2,10 +2,10 @@
 /*
  * GET home page.
  */
+var InstrumentController = require('../controllers/InstrumentController');
 
 exports.registerControllerRoutes = function(app, broadcaster){
   app.get('/:instrumentName', function(req, res){
-     var controller = new InstrumentController(broadcaster);
-      controller.viewInstrument(req.instrumentName);
+     InstrumentController.viewInstrument(req.instrumentName, res);
   });
 };
