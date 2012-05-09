@@ -98,11 +98,13 @@
             for(var i = 0; i < views.length; i++){
                 expect(addSpy.calledWith(views[i].model)).to.equal(true);
             }
+
+            addSpy.restore();
         },
         "test model should have instrument name": function(){
             var model = NODIO.InstrumentView.buildModel('piano', []);
 
-            expect(model.instrumentName).to.be('piano');
+            expect(model.getInstrumentName()).to.be('piano');
         }
     });
 }());
@@ -122,19 +124,34 @@
     });
 
     TestCase('InstrumentModel.listenToInstrument()', {
+        setUp : function(){
+            this.connectStub = sinon.stub(io, 'connect');
+
+            this.socket = {
+                emit : sinon.spy()
+            };
+            this.connectStub.returns(this.socket);
+        },
+        tearDown : function(){
+            this.connectStub.restore();
+        },
         'test should connect to socket.io and contain it as instance' : function(){
             // setup
-            var connectStub = sinon.stub(io, 'connect');
-
-            var socket = {d : '9'};
-            connectStub.returns(socket);
-
             // test
             var instrumentModel = new NODIO.InstrumentModel();
             // assert
-            expect(instrumentModel.socket).to.be(socket);
+            expect(instrumentModel.socket).to.be(this.socket);
         },
         'test should emit listenToInstrument with name of instrument' : function(){
+            // test
+            var instrumentModel = new NODIO.InstrumentModel();
+            instrumentModel.setInstrumentName('bass');
+
+            //console.log(instrumentModel.instrumentName);
+            // assert
+            expect(this.socket.emit.calledWith(
+                'listenToInstrument', {instrumentName : 'bass'}))
+                .to.be(true);
         },
         "test should bind 'keyPressed' event on socket to playKey" : function(){
         }

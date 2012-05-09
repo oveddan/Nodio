@@ -29,7 +29,7 @@ var NODIO = NODIO || {};
 
     InstrumentView.buildModel = function(instrumentName, childViews){
         var model = new NODIO.InstrumentModel();
-        model.instrumentName = instrumentName;
+        model.setInstrumentName(instrumentName);
         for(var i = 0; i < childViews.length; i++){
             model.add(childViews[i].model);
         }
@@ -38,10 +38,20 @@ var NODIO = NODIO || {};
 
     NODIO.InstrumentModel = Backbone.Collection.extend({
         initialize : function(){
+            //console.log(this);
             this.listenToInstrument();
         },
         listenToInstrument : function(){
             this.socket = io.connect();
+            var instrumentName = this.getInstrumentName();
+            console.log(instrumentName);
+            this.socket.emit('listenToInstrument', {instrumentName : instrumentName});
+        },
+        setInstrumentName : function(name){
+            this.instrumentName = name;
+        },
+        getInstrumentName: function(){
+            return this.instrumentName;
         }
     });
 
