@@ -37,7 +37,12 @@ var NODIO = NODIO || {};
     };
 
     NODIO.InstrumentModel = Backbone.Collection.extend({
+        initialize : function(){
+            this.listenToInstrument()
+        },
+        listenToInstrument : function(){
 
+        }
     });
 
     NODIO.KeyView = Backbone.View.extend({

@@ -1,9 +1,4 @@
 (function(){
-    TestCase('InstrumentView', {
-        'test should extent Backbone view' : function(){
-
-        }
-    });
     TestCase('InstrumentView({el : instrumentElement})', {
         setUp : function(){
             this.childViewsStub = sinon.stub(NODIO.InstrumentView, "buildChildViews");
@@ -113,23 +108,29 @@
 }());
 
 (function(){
-    TestCase('InstrumentModel', {
-        'should extend backbone collection model' : function(){
+    TestCase('InstrumentModel()', {
+        'test should listen to instrument' : function(){
+            var spy = sinon.spy(NODIO.InstrumentModel.prototype, 'listenToInstrument');
+
+            var instrumentModel = new NODIO.InstrumentModel();
+
+            expect(spy.called).to.be(true);
         }
     });
-
-    TestCase('InstrumentModel.initialize()', {
-        "test should listenForKeyPress(keyModel) on 'add'" : function(){
+    TestCase('InstrumentModel.add(keyModel)', {
+        'test should throw error if not KeyModel' : function(){
         },
-        'test shouldListenToInstrument()' : function(){
+        'test should contain model in models': function(){
+        },
+        "'test should call keyPressed(name) when keyModel emits 'keyPressed'" : function(){
         }
     });
 
-    TestCase('InstrumentModel.listenForKeyPress(keyModel)', {
-       "test should invoke keyPressed(name) when keyModel triggers 'keyPressed'" : function(){
-
-       }
-    });
+//    TestCase('InstrumentModel.listenForKeyPress(keyModel)', {
+//       "test should invoke keyPressed(name) when keyModel triggers 'keyPressed'" : function(){
+//
+//       }
+//    });
 
     TestCase('InstrumentModel.keyPressed(name)', {
         "test should emit 'keyPressed' with name on contained socket" : function(){
