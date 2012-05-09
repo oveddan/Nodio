@@ -115,8 +115,23 @@
             var instrumentModel = new NODIO.InstrumentModel();
 
             expect(spy.called).to.be(true);
+
+            // restore
+            spy.restore();
         }
     });
+
+    TestCase('InstrumentModel.listenToInstrument()', {
+        'test should connect to socket.io' : function(){
+        },
+        'test should contain instance of socket' : function(){
+        },
+        'test should emit listenToInstrument with name of instrument' : function(){
+        },
+        "test should bind 'keyPressed' event on socket to playKey" : function(){
+        }
+    });
+
     TestCase('InstrumentModel.add(keyModel)', {
         'test should throw error if not KeyModel' : function(){
         },
@@ -135,17 +150,6 @@
     TestCase('InstrumentModel.keyPressed(name)', {
         "test should emit 'keyPressed' with name on contained socket" : function(){
 
-        }
-    });
-
-    TestCase('InstrumentModel.listenToInstrument()', {
-        'test should connect to socket.io' : function(){
-        },
-        'test should contain instance of socket' : function(){
-        },
-        'test should emit listenToInstrument with name of instrument' : function(){
-        },
-        "test should bind 'keyPressed' event on socket to playKey" : function(){
         }
     });
 

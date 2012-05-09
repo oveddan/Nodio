@@ -3,7 +3,6 @@ server: http://localhost:4224
 load:
   - 'http://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js'
   - ../lib/underscore.js
-  - ../../../node_modules/socket.io/node_modules/socket.io-client/dist/socket.io.js
   - ../lib/*.js
   - ../*.js
   - /lib/*.js
