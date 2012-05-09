@@ -10,60 +10,75 @@
                 var view = new NODIO.InstrumentView({el : 'a'});
             }).to.throwError();
         },
-        'test should bindInstrumentModel()' : function(){
+        'test should build child views then build instrument model and contain that as collection model' : function(){
             // setup
-            NODIO.InstrumentView.bindInstrumentModel = sinon.spy();
-
+            // build child views stub
+            var expectedViews = {G : "7"}; // build random object to be returned;
+            var $el = $(document.createElement('a'));
+            var childViewsStub = sinon.stub(NODIO.InstrumentView, "buildChildViews");
+            childViewsStub.withArgs($el).returns(expectedViews);
+            // build model building stub
+            var expectedModel = {d : "5"};
+            var buildModelStub = sinon.stub(NODIO.InstrumentView, "buildModel");
+            buildModelStub.withArgs(expectedViews).returns(expectedModel);
             // test
-            var instrumentView = new NODIO.InstrumentView({el : document.createElement('a')});
+            var instrumentView = new NODIO.InstrumentView({el : $el});
 
             // assert
-            expect(NODIO.InstrumentView.bindInstrumentModel.called).to.be.ok;
+            expect(instrumentView.collection).to.equal(expectedModel);
+
+            // restore
+            childViewsStub.restore();
+            buildModelStub.restore();
         }
     });
 
-    TestCase('InstrumentView.bindInstrumentModel()', {
+    TestCase('InstrumentView.buildModel(childViews)', {
         setUp : function(){
-            /*:DOC element = <ul data-name='piano'>
-                <li class='key'>a</li>
-                <li class='notKey'>b</li>
-                <li class='key'>c</li>
-                <li class='key'>d</li>
-            </ul>  */
-
-            this.instrumentModel = {a : 'b'};
-            NODIO.InstrumentModel = sinon.stub().returns(this.instrumentModel);
-            NODIO.KeyView = sinon.stub();
         },
-        "test should create key views from all elements in view with class='key'" : function(){
-            var elementsWithKey = $(this.element).find('.key');
-
-            var instrumentView = new NODIO.InstrumentView({el : this.element});
-
-            expect(NODIO.KeyView.callCount).to.be(elementsWithKey.length);
-            for(var i = 0; i < elementsWithKey.length; i++){
-                expect(NODIO.KeyView.calledWith(
-                    {el : elementsWithKey[i]}
-                )).to.be.true;
-            }
+        tearDown : function(){
         },
-        "test should create and contain instrument collection model": function(){
+        "test should return instance of InstrumentModel": function(){
             // test
-            var instrumentView = new NODIO.InstrumentView({el : this.element});
+            var model = NODIO.InstrumentView.buildModel([]);
 
-            expect(instrumentView.collection).to.eql(this.instrumentModel);
+            expect(model).to.be.a(NODIO.InstrumentModel);
         },
-        "test instrument model should contain model for each key": function(){
-            // setup
-            
+        "test should add all models in child views to collection model": function(){
 
-            // test
-
-            // assert
         },
         "test should create instrument model with name from data('name') from view": function(){
+        }
+    });
 
+    TestCase('InstrumentView.buildChildViews($el)', {
+        setUp : function(){
+            /*:DOC element = <ul data-name='piano'>
+             <li class='key'>a</li>
+             <li class='notKey'>b</li>
+             <li class='key'>c</li>
+             <li class='key'>d</li>
+             </ul>  */
+        },
+        "test should return key views from all elements in view with class='key'" : function(){
+            var $el = $(this.elements);
 
+            var elementsWithKey = $el.find('.key');
+
+            var expectedViews = {};
+
+            for(var i = 0; i < elementsWithKey.length; i++){
+                var childView = new NODIO.KeyView({
+                    el : elementsWithKey[i]
+                });
+                expectedViews.push(childView);
+            }
+
+            var actualViews = NODIO.InstrumentView.buildChildViews($el);
+
+            var instrumentView = new NODIO.InstrumentView({el : this.element});
+
+            expect(expectedViews).to.eql(actualViews);
         }
     });
 }());
@@ -71,7 +86,6 @@
 (function(){
     TestCase('InstrumentModel', {
         'should extend backbone collection model' : function(){
-
         }
     });
 
@@ -132,11 +146,13 @@
 
     TestCase('KeyView.events', {
        'test should call pressKey() when key button clicked' : function(){
+       },
+       'test when model fires event keyPressed, should call play() on view' : function(){
        }
     });
 
     TestCase('KeyView.pressKey()' ,{
-       'test should call pressKey(this.keyName) on model' : function(){
+       'test should fire keyPressed(this.keyName) on model' : function(){
        }
     });
 
@@ -144,7 +160,7 @@
         "test should call play() on 'sound'" : function(){
         }
     });
-}());_
+}());
 
 (function(){
     TestCase('KeyModel', {
@@ -153,14 +169,14 @@
        }
     });
 
-    TestCase('KeyModel.play()', {
-       "test should fire 'play' event" : function(){
-
-       }
-    });
+//    TestCase('KeyModel.play()', {
+//       "test should fire 'play' event" : function(){
+//
+//       }
+//    });
 
     TestCase('KeyModel.pressKey()', {
        "test should fire 'keyPressed' event with key name": function(){
        }
     });
-})
+}());
