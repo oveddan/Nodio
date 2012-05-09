@@ -82,10 +82,6 @@
     });
 
     TestCase('InstrumentView.buildModel(childViews)', {
-        setUp : function(){
-        },
-        tearDown : function(){
-        },
         "test should return instance of InstrumentModel": function(){
             // test
             var model = NODIO.InstrumentView.buildModel(null, []);
@@ -93,7 +89,20 @@
             expect(model).to.be.a(NODIO.InstrumentModel);
         },
         "test should add all models in child views to collection model": function(){
+            var views = [
+                {model : {a : '6'}},
+                {model : {g : '9'}},
+                {model : {fd : '45'}},
+                {model : {fd : '99'}}
+            ];
 
+            var addSpy = sinon.spy(NODIO.InstrumentModel.prototype, "add");
+
+            var model = NODIO.InstrumentView.buildModel('piano', views);
+
+            for(var i = 0; i < views.length; i++){
+                expect(addSpy.calledWith(views[i].model)).to.equal(true);
+            }
         },
         "test model should have instrument name": function(){
             var model = NODIO.InstrumentView.buildModel('piano', []);

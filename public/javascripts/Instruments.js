@@ -14,7 +14,7 @@ var NODIO = NODIO || {};
     InstrumentView.buildChildViews = function($el){
         var childViews = [],
             elementsWithKey = $el.find('.key');
-        for(var i = 0; i < elementsWithKey.length; i++){
+        for(var i = 0, max = elementsWithKey.length; i < max; i++){
             childViews.push(
                 new NODIO.KeyView({
                 el : elementsWithKey[i]
@@ -30,6 +30,9 @@ var NODIO = NODIO || {};
     InstrumentView.buildModel = function(instrumentName, childViews){
         var model = new NODIO.InstrumentModel();
         model.instrumentName = instrumentName;
+        for(var i = 0; i < childViews.length; i++){
+            model.add(childViews[i].model);
+        }
         return model;
     };
 
