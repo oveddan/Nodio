@@ -1,6 +1,6 @@
 var NODIO = NODIO || {};
 
-(function($, Backbone){
+(function($, Backbone, io){
     var InstrumentView = NODIO.InstrumentView = Backbone.View.extend({
         initialize : function(){
             if(!this.el)
@@ -38,10 +38,10 @@ var NODIO = NODIO || {};
 
     NODIO.InstrumentModel = Backbone.Collection.extend({
         initialize : function(){
-            this.listenToInstrument()
+            this.listenToInstrument();
         },
         listenToInstrument : function(){
-
+            this.socket = io.connect();
         }
     });
 
@@ -50,5 +50,5 @@ var NODIO = NODIO || {};
     });
 
 
-}(jQuery, Backbone));
+}(jQuery, Backbone, io));
 

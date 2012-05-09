@@ -122,9 +122,17 @@
     });
 
     TestCase('InstrumentModel.listenToInstrument()', {
-        'test should connect to socket.io' : function(){
-        },
-        'test should contain instance of socket' : function(){
+        'test should connect to socket.io and contain it as instance' : function(){
+            // setup
+            var connectStub = sinon.stub(io, 'connect');
+
+            var socket = {d : '9'};
+            connectStub.returns(socket);
+
+            // test
+            var instrumentModel = new NODIO.InstrumentModel();
+            // assert
+            expect(instrumentModel.socket).to.be(socket);
         },
         'test should emit listenToInstrument with name of instrument' : function(){
         },
