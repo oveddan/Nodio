@@ -6,7 +6,8 @@ var NODIO = NODIO || {};
             if(!this.el)
                 throw('must bind dom element to property el in constructor');
             var childViews = InstrumentView.buildChildViews(this.$el);
-            this.collection = InstrumentView .buildModel(childViews);
+            var instrumentName = InstrumentView.getInstrumentName(this.$el);
+            this.collection = InstrumentView.buildModel(instrumentName, childViews);
         }
     });
 
@@ -22,8 +23,14 @@ var NODIO = NODIO || {};
         return childViews;
     };
 
-    InstrumentView.buildModel = function(childViews){
-        return new NODIO.InstrumentModel();
+    InstrumentView.getInstrumentName = function($el){
+        return $el.data('name');
+    };
+
+    InstrumentView.buildModel = function(instrumentName, childViews){
+        var model = new NODIO.InstrumentModel();
+        model.instrumentName = instrumentName;
+        return model;
     };
 
     NODIO.InstrumentModel = Backbone.Collection.extend({

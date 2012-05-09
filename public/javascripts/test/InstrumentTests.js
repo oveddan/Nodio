@@ -5,55 +5,44 @@
         }
     });
     TestCase('InstrumentView({el : instrumentElement})', {
+        setUp : function(){
+            this.childViewsStub = sinon.stub(NODIO.InstrumentView, "buildChildViews");
+            this.buildModelStub = sinon.stub(NODIO.InstrumentView, "buildModel");
+            this.getInstrumentNameStub = sinon.stub(NODIO.InstrumentView, "getInstrumentName");
+        },
+        tearDown : function(){
+            this.childViewsStub.restore();
+            this.buildModelStub.restore();
+            this.getInstrumentNameStub.restore();
+        },
         'test should throw error if el is not dom element' : function(){
             expect(function(){
                 var view = new NODIO.InstrumentView({el : 'a'});
             }).to.throwError();
         },
-        'test should build child views then build instrument model and contain that as collection model' : function(){
+        'test should build instrument model instrument name and childViews and contain that as collection model' : function(){
             // setup
             // build child views stub
             var expectedViews = {G : "7"}; // build random object to be returned;
             var $el = $(document.createElement('a'));
-            var childViewsStub = sinon.stub(NODIO.InstrumentView, "buildChildViews");
-            childViewsStub.withArgs($el).returns(expectedViews);
+            this.childViewsStub.withArgs($el).returns(expectedViews);
+            // build getInstrumentName stub
+            var expectedName = "drums and bass";
+            this.getInstrumentNameStub.withArgs($el).returns(expectedName);
             // build model building stub
             var expectedModel = {d : "5"};
-            var buildModelStub = sinon.stub(NODIO.InstrumentView, "buildModel");
-            buildModelStub.withArgs(expectedViews).returns(expectedModel);
+            this.buildModelStub.withArgs(expectedName, expectedViews).returns(expectedModel);
             // test
             var instrumentView = new NODIO.InstrumentView({el : $el});
 
             // assert
             expect(instrumentView.collection).to.equal(expectedModel);
-
-            // restore
-            childViewsStub.restore();
-            buildModelStub.restore();
-        }
-    });
-
-    TestCase('InstrumentView.buildModel(childViews)', {
-        setUp : function(){
-        },
-        tearDown : function(){
-        },
-        "test should return instance of InstrumentModel": function(){
-            // test
-            var model = NODIO.InstrumentView.buildModel([]);
-
-            expect(model).to.be.a(NODIO.InstrumentModel);
-        },
-        "test should add all models in child views to collection model": function(){
-
-        },
-        "test should create instrument model with name from data('name') from view": function(){
         }
     });
 
     TestCase('InstrumentView.buildChildViews($el)', {
         setUp : function(){
-            /*:DOC element = <ul data-name='piano'>
+            /*:DOC element = <ul>
              <li class='key'>a</li>
              <li class='notKey'>b</li>
              <li class='key'>c</li>
@@ -79,6 +68,37 @@
             var instrumentView = new NODIO.InstrumentView({el : this.element});
 
             expect(expectedViews).to.eql(actualViews);
+        }
+    });
+
+    TestCase('InstrumentView.getInstrumentName($el)', {
+       'test should grab data-name attribute from element' : function(){
+           /*:DOC element = <ul data-name='guitar' /> */
+           var $el = $(this.element);
+           var expected = 'guitar';
+           var actual = NODIO.InstrumentView.getInstrumentName($el);
+           expect(expected).to.equal(actual);
+       }
+    });
+
+    TestCase('InstrumentView.buildModel(childViews)', {
+        setUp : function(){
+        },
+        tearDown : function(){
+        },
+        "test should return instance of InstrumentModel": function(){
+            // test
+            var model = NODIO.InstrumentView.buildModel(null, []);
+
+            expect(model).to.be.a(NODIO.InstrumentModel);
+        },
+        "test should add all models in child views to collection model": function(){
+
+        },
+        "test model should have instrument name": function(){
+            var model = NODIO.InstrumentView.buildModel('piano', []);
+
+            expect(model.instrumentName).to.be('piano');
         }
     });
 }());
