@@ -44,6 +44,12 @@ var NODIO = NODIO || {};
             console.log(instrumentName);
             this.socket.emit('listenToInstrument', {instrumentName : instrumentName});
         },
+        listenForPressedKeys : function(){
+            var self = this;
+            this.socket.on('jamal', function(data){
+               self.keyPressed(data.key);
+            });
+        },
         setInstrumentName : function(name){
             this.instrumentName = name;
             this.listenToInstrument(name);

@@ -146,6 +146,7 @@
         'test should emit listenToInstrument with name of instrument' : function(){
             // test
             var instrumentModel = new NODIO.InstrumentModel();
+            this.socket.emit = sinon.spy();
             instrumentModel.setInstrumentName('bass');
 
             // assert
@@ -158,11 +159,24 @@
     TestCase('InstrumentModel.listenForPressedKeyes()', {
         setUp : stubConnectAndSocket,
         tearDown: restoreSocket,
-        "test should bind 'keyPressed' function to socket event 'keyPressed'" : function(){
+        "test should bind 'keyPressed' function when socket emits event 'keyPressed'" : function(){
             // test
             var instrumentModel = new NODIO.InstrumentModel();
+            this.socket.on = sinon.spy().withArgs('keyPressed');
+            instrumentModel.keyPressed = sinon.spy();
 
-            instrumentModel.setInstrumentName('bass');
+            // start test
+            instrumentModel.listenForPressedKeys();
+            // invoke second method in 'on', simulating on being fired
+            var onCall = this.socket.on.firstCall;
+            var onFunction = onCall.args[1];
+            var testKeyPress = {key : 'fa'};
+            onFunction(testKeyPress);
+            // end test
+
+            // assert
+            expect(instrumentModel.keyPressed.calledWith(testKeyPress.key)).to.be.true;
+            expect(instrumentModel.keyPressed.calledOn(instrumentModel));
         }
     });
 
@@ -198,8 +212,6 @@
         this.connectStub = sinon.stub(io, 'connect');
 
         this.socket = {
-            emit : sinon.spy(),
-            on : sinon.stub()
         };
         this.connectStub.returns(this.socket);
     }
