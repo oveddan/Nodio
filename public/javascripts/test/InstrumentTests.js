@@ -159,7 +159,7 @@
     TestCase('InstrumentModel.listenForPressedKeyes()', {
         setUp : stubConnectAndSocket,
         tearDown: restoreSocket,
-        "test should bind 'keyPressed' function when socket emits event 'keyPressed'" : function(){
+        "test should call 'keyPressed' function on model when socket emits event 'keyPressed'" : function(){
             // test
             var instrumentModel = new NODIO.InstrumentModel();
             this.socket.on = sinon.spy();
