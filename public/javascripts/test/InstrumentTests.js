@@ -265,12 +265,12 @@
                 instrumentModel.playKey(key);
             }).to.not.throwException();
         },
-        'test should find key with name and call play() on it' : function(){
+        "test should find key with name and trigger 'play' on it" : function(){
             // setup
             var instrumentModel = new NODIO.InstrumentModel();
 
             var expectedFirsKey = new NODIO.KeyModel();
-            expectedFirsKey.play = sinon.spy();
+            expectedFirsKey.trigger = sinon.spy();
             var key = 'do';
 
             // stub result of where to return collection with 'first' method stubbed
@@ -283,7 +283,7 @@
             instrumentModel.playKey(key);
 
             // expect
-            expect(expectedFirsKey.play.called).to.be(true);
+            expect(expectedFirsKey.trigger.calledWith('play')).to.be(true);
         }
     });
 
@@ -304,20 +304,55 @@
 }());
 
 (function(){
-    TestCase('KeyView', {
-        'test should extend Backbone view': function(){
+
+    TestCase('KeyView({el : element}) - good html', {
+        setUp : function(){
+            /*:DOC element = <li class='key' data-name='do' >
+                <audio src='/do.mp3' type='audio/mp3' />
+             </li>
+             */
+            this.keyView = new NODIO.KeyView({el : this.element});
+        },
+        "test should build and contain model with keyName in element assigned to model" : function(){
+            // test
+            expect(this.keyView.model != null).to.be(true);
+            expect(this.keyView.model.get('keyName')).to.be('do');
+        },
+        "test should grab audio element in view and assign it to 'sound'": function(){
+            expect(this.keyView.sound != null).to.be(true);
+            expect(this.keyView.sound).to.eql($(this.element).find('audio'));
+        },
+        "test should call play() when model triggers 'play'": function(){
+            this.keyView.play = sinon.spy();
+            this.keyView.model.trigger('play');
+
+            expect(this.keyView.play.calledOnce).to.be(true);
+            expect(this.keyView.play.calledOn(this.keyView));
+        }
+
+    });
+    TestCase("KeyView({el : element}) - bad html", {
+        "test should not throw error if cannot find key name" : function(){
+            expect(function(){
+                var keyView = new NODIO.KeyView('<span />');
+            }).to.not.throwException();
         }
     });
 
-    TestCase('KeyView.initialize', {
-        "test should call play() when model fires 'play'": function(){
-
+    TestCase('KiewView.parseElementForName($element)', {
+        setUp : function(){
+            /*:DOC element = <li class='key' data-name='do' >
+             <audio src='/do.mp3' type='audio/mp3' />
+             </li>
+             */
         },
-        "test should grab audio element in view and assign it to 'sound'": function(){
-
-        },
-        "test should grab key name in view and assign it to 'keyName'" : function(){
-
+        'test should grab name from data-name attribute and return it' : function(){
+            // setup
+            var expected = 'do';
+            // test
+            var actual = NODIO.KeyView.parseName($(this.element));
+            // expect
+            expect(actual).to.be(expected);
         }
     });
 
@@ -340,17 +375,11 @@
 }());
 
 (function(){
-    TestCase('KeyModel', {
-       'test should extend Backbone model': function(){
+    TestCase('KeyModel.play()', {
+       "test should fire 'play' event" : function(){
 
        }
     });
-
-//    TestCase('KeyModel.play()', {
-//       "test should fire 'play' event" : function(){
-//
-//       }
-//    });
 
     TestCase('KeyModel.pressKey()', {
        "test should fire 'keyPressed' event with key name": function(){
