@@ -128,46 +128,37 @@
     });
 
     TestCase('InstrumentModel()', {
+        setUp : stubConnectAndSocket,
+        tearDown: restoreSocket,
         'test should create and contain socket' : function(){
             // setup
-            var socket = {a : 5};
-            var connectStub = sinon.stub(io, 'connect');
-            connectStub.returns(socket);
-
             // test
             var instrumentModel = new NODIO.InstrumentModel();
-            // restore
-            connectStub.restore();
 
             // assert
-            expect(instrumentModel.socket).to.be(socket);
+            expect(instrumentModel.socket).to.be(this.socket);
         }
     });
 
     TestCase('InstrumentModel.listenToInstrument()', {
-        setUp : function(){
-            this.connectStub = sinon.stub(io, 'connect');
-
-            this.socket = {
-                emit : sinon.spy()
-            };
-            this.connectStub.returns(this.socket);
-        },
-        tearDown : function(){
-            this.connectStub.restore();
-        },
+        setUp : stubConnectAndSocket,
+        tearDown: restoreSocket,
         'test should emit listenToInstrument with name of instrument' : function(){
             // test
             var instrumentModel = new NODIO.InstrumentModel();
             instrumentModel.setInstrumentName('bass');
 
-            console.log(instrumentModel.getInstrumentName());
             // assert
             expect(this.socket.emit.calledWith(
                 'listenToInstrument', {instrumentName : 'bass'}))
                 .to.be(true);
-        },
-        "test should bind 'keyPressed' event on socket to playKey" : function(){
+        }
+    });
+
+    TestCase('InstrumentModel.listenForPressedKeyes()', {
+        setUp : stubConnectAndSocket,
+        tearDown: restoreSocket,
+        "test should bind 'keyPressed' function to socket event 'keyPressed'" : function(){
             // test
             var instrumentModel = new NODIO.InstrumentModel();
 
@@ -176,6 +167,8 @@
     });
 
     TestCase('InstrumentModel.add(keyModel)', {
+        setUp : stubConnectAndSocket,
+        tearDown: restoreSocket,
         'test should throw error if not KeyModel' : function(){
         },
         'test should contain model in models': function(){
@@ -200,6 +193,20 @@
         'test should find key with name and call play() on it' : function(){
         }
     });
+
+    function stubConnectAndSocket(){
+        this.connectStub = sinon.stub(io, 'connect');
+
+        this.socket = {
+            emit : sinon.spy(),
+            on : sinon.stub()
+        };
+        this.connectStub.returns(this.socket);
+    }
+
+    function restoreSocket(){
+        this.connectStub.restore();
+    }
 
 }());
 
