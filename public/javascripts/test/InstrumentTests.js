@@ -127,6 +127,23 @@
         }
     });
 
+    TestCase('InstrumentModel()', {
+        'test should create and contain socket' : function(){
+            // setup
+            var socket = {a : 5};
+            var connectStub = sinon.stub(io, 'connect');
+            connectStub.returns(socket);
+
+            // test
+            var instrumentModel = new NODIO.InstrumentModel();
+            // restore
+            connectStub.restore();
+
+            // assert
+            expect(instrumentModel.socket).to.be(socket);
+        }
+    });
+
     TestCase('InstrumentModel.listenToInstrument()', {
         setUp : function(){
             this.connectStub = sinon.stub(io, 'connect');
@@ -138,27 +155,6 @@
         },
         tearDown : function(){
             this.connectStub.restore();
-        },
-        'test should not new create socket if already contains one' : function(){
-            // setup
-            var instrumentModel = new NODIO.InstrumentModel();
-            instrumentModel.socket = this.socket;
-
-            // test
-            instrumentModel.listenToInstrument('guitar');
-
-            // expect
-            expect(this.connectStub.called).to.be.false;
-        },
-        'test should create and contain socket if does not contain one' : function(){
-            // setup
-            var instrumentModel = new NODIO.InstrumentModel();
-
-            // test
-            instrumentModel.listenToInstrument('bass');
-
-            // assert
-            expect(instrumentModel.socket).to.be(this.socket);
         },
         'test should emit listenToInstrument with name of instrument' : function(){
             // test
@@ -176,8 +172,6 @@
             var instrumentModel = new NODIO.InstrumentModel();
 
             instrumentModel.setInstrumentName('bass');
-
-
         }
     });
 
