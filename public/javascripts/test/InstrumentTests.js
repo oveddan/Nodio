@@ -140,29 +140,37 @@
         }
     });
 
-    TestCase('InstrumentModel.listenToInstrument()', {
+    TestCase('InstrumentModel.listenToInstrument(instrumentName)', {
         setUp : stubConnectAndSocket,
         tearDown: restoreSocket,
         'test should emit listenToInstrument with name of instrument' : function(){
-            // test
+            // setup
             var instrumentModel = new NODIO.InstrumentModel();
-            this.socket.emit = sinon.spy();
+            // test
             instrumentModel.setInstrumentName('bass');
 
             // assert
             expect(this.socket.emit.calledWith(
                 'listenToInstrument', {instrumentName : 'bass'}))
                 .to.be(true);
+        },
+        'test should listen for pressed keys' : function(){
+            // setup
+            var instrumentModel = new NODIO.InstrumentModel();
+            instrumentModel.listenForPressedKeys = sinon.spy();
+            // test
+            instrumentModel.setInstrumentName('bass');
+            // assert
+            expect(instrumentModel.listenForPressedKeys.called).to.be(true);
         }
     });
 
     TestCase('InstrumentModel.listenForPressedKeyes()', {
         setUp : stubConnectAndSocket,
         tearDown: restoreSocket,
-        "test should call 'keyPressed' function on model when socket emits event 'keyPressed'" : function(){
+        "test should make 'keyPressed' on model be called when socket emits event 'keyPressed'" : function(){
             // test
             var instrumentModel = new NODIO.InstrumentModel();
-            this.socket.on = sinon.spy();
             instrumentModel.keyPressed = sinon.spy();
 
             // start test
@@ -183,11 +191,13 @@
     TestCase('InstrumentModel.add(keyModel)', {
         setUp : stubConnectAndSocket,
         tearDown: restoreSocket,
-        'test should throw error if not KeyModel' : function(){
-        },
-        'test should contain model in models': function(){
-        },
         "'test should call keyPressed(name) when keyModel emits 'keyPressed'" : function(){
+            var keyA = new NODIO.KeyModel({key : "a"})
+            ,keyB = new NODIO.KeyModel({key : "C22"})
+            ,keyC = new NODIO.KeyModel({key : "943"})
+            ,keyD = new NODIO.KeyModel({key : "22"});
+
+           // mock key B and key D's
         }
     });
 
@@ -198,7 +208,7 @@
 //    });
 
     TestCase('InstrumentModel.keyPressed(name)', {
-        "test should emit 'keyPressed' with name on contained socket" : function(){
+        "test should emit 'keyPressed' on key with name of contained socket" : function(){
 
         }
     });
@@ -212,6 +222,8 @@
         this.connectStub = sinon.stub(io, 'connect');
 
         this.socket = {
+            emit : sinon.spy(),
+            on : sinon.spy()
         };
         this.connectStub.returns(this.socket);
     }
