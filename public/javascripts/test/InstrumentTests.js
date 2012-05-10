@@ -165,7 +165,7 @@
         }
     });
 
-    TestCase('InstrumentModel.listenForPressedKeyes()', {
+    TestCase('InstrumentModel.listenForPressedKeys()', {
         setUp : stubConnectAndSocket,
         tearDown: restoreSocket,
         "test should make 'keyPressed' on model be called when socket emits event 'keyPressed'" : function(){
@@ -175,7 +175,7 @@
 
             // start test
             instrumentModel.listenForPressedKeys();
-            // invoke second method in 'on', simulating on being fired
+            // invoke second method in 'on', simulating 'on' being fired
             var onFunction = this.socket.on.firstCall.args[1];
             var testKeyPress = {key : 'fa'};
             onFunction(testKeyPress);
@@ -183,26 +183,36 @@
 
             // assert
             expect(this.socket.on.firstCall.args[0]).to.be('keyPressed');
-            expect(instrumentModel.keyPressed.calledWith(testKeyPress.key)).to.be.true;
-            expect(instrumentModel.keyPressed.calledOn(instrumentModel)).to.be.true;
+            expect(instrumentModel.keyPressed.calledWith(testKeyPress.key)).to.be(true);
+            expect(instrumentModel.keyPressed.calledOn(instrumentModel)).to.be(true);
+
+
         }
     });
 
     TestCase('InstrumentModel.add(keyModel)', {
         setUp : stubConnectAndSocket,
         tearDown: restoreSocket,
-        "'test should call keyPressed(name) when keyModel emits 'keyPressed'" : function(){
-            var keyA = new NODIO.KeyModel({key : "a"})
-            ,keyB = new NODIO.KeyModel({key : "C22"})
-            ,keyC = new NODIO.KeyModel({key : "943"})
-            ,keyD = new NODIO.KeyModel({key : "22"});
+        "test should cause keyPressed(key) to be called on keyModel's 'on' event" : function(){
+            // setup
+            var keyB = new NODIO.KeyModel({keyName : "C22"});
+            var instrumentModel = new NODIO.InstrumentModel();
+            instrumentModel.keyPressed = sinon.spy();
+            // test
+            instrumentModel.add(keyB);
+            // fire event on model
+            var data = {key : keyB.keyName};
+            keyB.trigger('keyPressed', data);
 
-           // mock key B and key D's
+            // expect
+            expect(instrumentModel.keyPressed.called).to.be(true);
+            expect(instrumentModel.keyPressed.calledOn(instrumentModel)).to.be(true);
+            expect(instrumentModel.keyPressed.calledWith(data));
         }
     });
 
 //    TestCase('InstrumentModel.listenForKeyPress(keyModel)', {
-//       "test should invoke keyPressed(name) when keyModel triggers 'keyPressed'" : function(){
+//       "test should invoke keyPressed(key.name) when keyModel triggers 'keyPressed'" : function(){
 //
 //       }
 //    });

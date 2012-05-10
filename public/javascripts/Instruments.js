@@ -36,13 +36,21 @@ var NODIO = NODIO || {};
         return model;
     };
 
+    NODIO.KeyModel = Backbone.Model.extend({
+
+    });
+
     NODIO.InstrumentModel = Backbone.Collection.extend({
+        model : NODIO.KeyModel,
         initialize : function(){
             this.socket = io.connect();
+            this.on('add', function(keyModel){
+                keyModel.on('keyPressed', this.keyPressed, this);
+            });
         },
         listenToInstrument : function(instrumentName){
-            console.log(instrumentName);
             this.socket.emit('listenToInstrument', {instrumentName : instrumentName});
+            this.listenForPressedKeys();
         },
         listenForPressedKeys : function(){
             var self = this;
@@ -56,6 +64,9 @@ var NODIO = NODIO || {};
         },
         getInstrumentName: function(){
             return this.instrumentName;
+        },
+        keyPressed : function(){
+
         }
     });
 
