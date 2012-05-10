@@ -110,13 +110,17 @@
 }());
 
 (function(){
-    TestCase('InstrumentModel()', {
-        'test should listen to instrument' : function(){
+    TestCase('InstrumentModel.setInstrumentName()', {
+        'test should listen to instrument with name' : function(){
+            // setup
             var spy = sinon.spy(NODIO.InstrumentModel.prototype, 'listenToInstrument');
-
             var instrumentModel = new NODIO.InstrumentModel();
 
-            expect(spy.called).to.be(true);
+            // test
+            instrumentModel.setInstrumentName('bass');
+
+            // expect
+            expect(spy.calledWith('bass')).to.be(true);
 
             // restore
             spy.restore();
@@ -135,10 +139,24 @@
         tearDown : function(){
             this.connectStub.restore();
         },
-        'test should connect to socket.io and contain it as instance' : function(){
+        'test should not new create socket if already contains one' : function(){
             // setup
-            // test
             var instrumentModel = new NODIO.InstrumentModel();
+            instrumentModel.socket = this.socket;
+
+            // test
+            instrumentModel.listenToInstrument('guitar');
+
+            // expect
+            expect(this.connectStub.called).to.be.false;
+        },
+        'test should create and contain socket if does not contain one' : function(){
+            // setup
+            var instrumentModel = new NODIO.InstrumentModel();
+
+            // test
+            instrumentModel.listenToInstrument('bass');
+
             // assert
             expect(instrumentModel.socket).to.be(this.socket);
         },
@@ -147,13 +165,19 @@
             var instrumentModel = new NODIO.InstrumentModel();
             instrumentModel.setInstrumentName('bass');
 
-            //console.log(instrumentModel.instrumentName);
+            console.log(instrumentModel.getInstrumentName());
             // assert
             expect(this.socket.emit.calledWith(
                 'listenToInstrument', {instrumentName : 'bass'}))
                 .to.be(true);
         },
         "test should bind 'keyPressed' event on socket to playKey" : function(){
+            // test
+            var instrumentModel = new NODIO.InstrumentModel();
+
+            instrumentModel.setInstrumentName('bass');
+
+
         }
     });
 

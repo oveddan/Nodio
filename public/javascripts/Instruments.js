@@ -38,17 +38,15 @@ var NODIO = NODIO || {};
 
     NODIO.InstrumentModel = Backbone.Collection.extend({
         initialize : function(){
-            //console.log(this);
-            this.listenToInstrument();
         },
-        listenToInstrument : function(){
+        listenToInstrument : function(instrumentName){
             this.socket = io.connect();
-            var instrumentName = this.getInstrumentName();
             console.log(instrumentName);
             this.socket.emit('listenToInstrument', {instrumentName : instrumentName});
         },
         setInstrumentName : function(name){
             this.instrumentName = name;
+            this.listenToInstrument(name);
         },
         getInstrumentName: function(){
             return this.instrumentName;
