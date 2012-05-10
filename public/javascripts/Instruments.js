@@ -69,10 +69,19 @@ var NODIO = NODIO || {};
             if(!data.key)
                 throw 'key cannot be null';
 
+            var key = data.key;
             this.socket.emit('keyPressed', {
                 instrumentName : this.instrumentName,
-                key : data.key
+                key : key
             });
+
+            this.playKey(key);
+        },
+        playKey : function(key){
+            var keyWithName = this.where({key : key})[0];
+
+            if(keyWithName)
+                keyWithName.play();
         }
     });
 

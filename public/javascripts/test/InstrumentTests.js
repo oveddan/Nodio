@@ -239,12 +239,51 @@
             });
         },
         "test should call playKey(keyName)" : function(){
+            // setup
+            var instrumentModel = new NODIO.InstrumentModel();
 
+            instrumentModel.setInstrumentName('guitar');
+            instrumentModel.playKey = sinon.spy();
+
+            // test
+            instrumentModel.keyPressed({key: 'g#'});
+
+            // expect
+            expect(instrumentModel.playKey.calledWith('g#')).to.be(true);
         }
     });
 
     TestCase("InstrumentModel.playKey(name)", {
+        'test key does not exist should not raise error': function(){
+            var key = 'do';
+            // setup
+            var instrumentModel = new NODIO.InstrumentModel();
+            instrumentModel.where = sinon.stub().withArgs({key:key}).returns([]);
+
+            // test
+            expect(function(){
+                instrumentModel.playKey(key);
+            }).to.not.throwException();
+        },
         'test should find key with name and call play() on it' : function(){
+            // setup
+            var instrumentModel = new NODIO.InstrumentModel();
+
+            var expectedFirsKey = new NODIO.KeyModel();
+            expectedFirsKey.play = sinon.spy();
+            var key = 'do';
+
+            // stub result of where to return collection with 'first' method stubbed
+            // out to return key
+            instrumentModel.where = sinon.stub().withArgs({key : key}).returns(
+                [expectedFirsKey, {}, {}, {}]
+            );
+
+            // test
+            instrumentModel.playKey(key);
+
+            // expect
+            expect(expectedFirsKey.play.called).to.be(true);
         }
     });
 
