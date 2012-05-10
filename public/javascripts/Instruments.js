@@ -65,8 +65,14 @@ var NODIO = NODIO || {};
         getInstrumentName: function(){
             return this.instrumentName;
         },
-        keyPressed : function(){
+        keyPressed : function(data){
+            if(!data.key)
+                throw 'key cannot be null';
 
+            this.socket.emit('keyPressed', {
+                instrumentName : this.instrumentName,
+                key : data.key
+            });
         }
     });
 

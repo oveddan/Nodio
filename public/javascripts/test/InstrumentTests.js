@@ -211,14 +211,34 @@
         }
     });
 
-//    TestCase('InstrumentModel.listenForKeyPress(keyModel)', {
-//       "test should invoke keyPressed(key.name) when keyModel triggers 'keyPressed'" : function(){
-//
-//       }
-//    });
+    TestCase('InstrumentModel.keyPressed({key : keyName})', {
+        setUp : stubConnectAndSocket,
+        tearDown: restoreSocket,
+        "test should raise error if key argument is null": function(){
+            // setup
+            var instrumentModel = new NODIO.InstrumentModel();
+            // test/expect
+            expect(function(){
+                instrumentModel.keyPressed({key : null});
+            }).to.throwError();
+        },
+        "test should emit 'keyPressed' on socket with key name and instrument name" : function(){
+            // setup
+            var instrumentModel = new NODIO.InstrumentModel();
+            instrumentModel.setInstrumentName('bass');
+            // need to reset emit in case called in other methods
+            this.socket.emit.reset();
+            // test
+            instrumentModel.keyPressed({key : 'b9'});
 
-    TestCase('InstrumentModel.keyPressed(name)', {
-        "test should emit 'keyPressed' on key with name of contained socket" : function(){
+            // expect
+            expect(this.socket.emit.calledWith('keyPressed')).to.be(true);
+            expect(this.socket.emit.firstCall.args[1]).to.eql({
+                instrumentName : 'bass',
+                key : 'b9'
+            });
+        },
+        "test should call playKey(keyName)" : function(){
 
         }
     });
