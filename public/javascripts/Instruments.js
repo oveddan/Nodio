@@ -46,7 +46,7 @@ var NODIO = NODIO || {};
         },
         listenForPressedKeys : function(){
             var self = this;
-            this.socket.on('jamal', function(data){
+            this.socket.on('keyPressed', function(data){
                self.keyPressed(data.key);
             });
         },

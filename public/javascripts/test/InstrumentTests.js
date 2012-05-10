@@ -162,21 +162,21 @@
         "test should bind 'keyPressed' function when socket emits event 'keyPressed'" : function(){
             // test
             var instrumentModel = new NODIO.InstrumentModel();
-            this.socket.on = sinon.spy().withArgs('keyPressed');
+            this.socket.on = sinon.spy();
             instrumentModel.keyPressed = sinon.spy();
 
             // start test
             instrumentModel.listenForPressedKeys();
             // invoke second method in 'on', simulating on being fired
-            var onCall = this.socket.on.firstCall;
-            var onFunction = onCall.args[1];
+            var onFunction = this.socket.on.firstCall.args[1];
             var testKeyPress = {key : 'fa'};
             onFunction(testKeyPress);
             // end test
 
             // assert
+            expect(this.socket.on.firstCall.args[0]).to.be('keyPressed');
             expect(instrumentModel.keyPressed.calledWith(testKeyPress.key)).to.be.true;
-            expect(instrumentModel.keyPressed.calledOn(instrumentModel));
+            expect(instrumentModel.keyPressed.calledOn(instrumentModel)).to.be.true;
         }
     });
 
