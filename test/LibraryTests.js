@@ -52,6 +52,7 @@ describe('InstrumentBroadcaster', function(){
     });
 
     describe('#bindEventsToSocket(socket)', function(){
+
         it('should listen for requests to hear instrument with socket', function(){
             // setup
             var socket = {
@@ -93,7 +94,23 @@ describe('InstrumentBroadcaster', function(){
             expect(socket.on.calledWith('keyPressed')).to.be.ok;
         });
         it("should broadcast key pressed on instrument when 'keyPressed' fired from socket", function(){
+            var socket = {
+                on : sinon.spy()
+            };
 
+            var originalKeyPressed = InstrumentBroadcaster.sendKeyPressed;
+            InstrumentBroadcaster.sendKeyPressed = sinon.spy();
+
+            // test
+            InstrumentBroadcaster.listenForKeyPresses(socket);
+            var callback = socket.on.firstCall.args[1];
+            var data = {key : 'b5', instrumentName : 'guitar'};
+            callback(data);
+
+            // expect
+            expect(InstrumentBroadcaster.sendKeyPressed .calledWith(socket, data.key, data.instrumentName)).to.be.ok;
+            // restore
+            InstrumentBroadcaster.sendKeyPressed = originalKeyPressed;
         });
     });
 
@@ -185,7 +202,7 @@ describe('InstrumentBroadcaster', function(){
                 });
 
             // test
-            InstrumentBroadcaster.SendKeyPressed(socket, key, instrumentName);
+            InstrumentBroadcaster.sendKeyPressed(socket, key, instrumentName);
 
             // assert
             emitSpy.calledWith({key : key}).should.be.ok;
