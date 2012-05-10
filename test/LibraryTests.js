@@ -57,23 +57,28 @@ describe('InstrumentBroadcaster', function(){
             var socket = {
                on : sinon.spy()
             };
-            InstrumentBroadcaster.listenForRequestsToHearInstrument = sinon.spy();
+            var listenForRequestsToHearInstrument = sinon.spy(InstrumentBroadcaster ,"listenForRequestsToHearInstrument");
             // test
             InstrumentBroadcaster.bindEventsToSocket(socket);
             // expect
-            expect(InstrumentBroadcaster.listenForRequestsToHearInstrument.calledWith(socket))
+            expect(listenForRequestsToHearInstrument.calledWith(socket))
                 .to.be.ok;
+
+            // restore
+            listenForRequestsToHearInstrument.restore();
         });
         it('should listen for key presses with socket', function(){
             // setup
             var socket = {
                 on : sinon.spy()
             };
-            InstrumentBroadcaster.listenForKeyPresses = sinon.spy();
+            var listenForKeyPresses = sinon.spy(InstrumentBroadcaster, "listenForKeyPresses");
             // test
             InstrumentBroadcaster.bindEventsToSocket(socket);
             // expect
-            expect(InstrumentBroadcaster.listenForKeyPresses.calledWith(socket)).to.be.ok;
+            expect(listenForKeyPresses.calledWith(socket)).to.be.ok;
+
+            listenForKeyPresses.restore();
         });
     });
 
@@ -93,26 +98,37 @@ describe('InstrumentBroadcaster', function(){
     });
 
     describe("#listenForRequestsToHearInstrument", function(){
-        it('should have socket join room with name of instrument when listenToInstrument fired', function(){
-            // setup
-            var socket = {
-                on : sinon.stub(),
+        beforeEach(function(){
+            this.socket = {
+                on : sinon.spy(),
                 join : sinon.spy()
             };
-            var spyForInstrument = socket.on.withArgs('listenToInstrument');
-
+        });
+        it("should bind 'listenToInstrument' event on socket", function(){
+            // setup
             // test
-            InstrumentBroadcaster.listenForRequestsToHearInstrument(socket);
+            InstrumentBroadcaster.listenForRequestsToHearInstrument(this.socket);
 
             // get function that was passed as second argument to 'on' and invoke it
-            var listenToInstrumentCallback = spyForInstrument.args[0][1];
+            expect(this.socket.on.calledOnce).to.be.ok;
+            expect(this.socket.on.firstCall.args[0]).to.equal('listenToInstrument');
+            expect(this.socket.on.firstCall.args[1]).to.be.a('function');
+        });
+        it('should have socket join room with name of instrument when listenToInstrument fired', function(){
+            // setup
+            // test
+            InstrumentBroadcaster.listenForRequestsToHearInstrument(this.socket);
+
+            // get function that was passed as second argument to 'on' and invoke it
+            expect(this.socket.on.called).to.be.true;
+            var listenToInstrumentCallback = this.socket.on.firstCall.args[1];
             expect(listenToInstrumentCallback).to.exist;
             var data = { instrumentName : 'thirdPiano' };
-            listenToInstrumentCallback.call(socket, data);
+            listenToInstrumentCallback.call(this.socket, data);
             // end test
 
             // assert
-            expect(socket.join.calledWith(data.instrumentName)).to.be.true;
+            expect(this.socket.join.calledWith(data.instrumentName)).to.be.true;
         });
     });
 
