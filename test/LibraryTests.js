@@ -46,7 +46,7 @@ describe('InstrumentBroadcaster', function(){
         beforeEach(function(){
             this.broadCaster = new InstrumentBroadcaster({});
             this.broadCaster.ioListener = {
-              on : sinon.spy()
+                on : sinon.spy()
             };
         });
     });
@@ -56,7 +56,7 @@ describe('InstrumentBroadcaster', function(){
         it('should listen for requests to hear instrument with socket', function(){
             // setup
             var socket = {
-               on : sinon.spy()
+                on : sinon.spy()
             };
             var listenForRequestsToHearInstrument = sinon.spy(InstrumentBroadcaster ,"listenForRequestsToHearInstrument");
             // test
