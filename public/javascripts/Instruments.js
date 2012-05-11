@@ -37,6 +37,11 @@ var NODIO = NODIO || {};
     };
 
     NODIO.KeyModel = Backbone.Model.extend({
+        initialize: function(){
+            this.on('play', function(){
+                console.log(this.get('keyName'));
+            })
+        },
         pressKey : function(){
             var keyName = this.get('keyName');
             if(keyName)
@@ -70,17 +75,18 @@ var NODIO = NODIO || {};
         getInstrumentName: function(){
             return this.instrumentName;
         },
-        keyPressed : function(key){
-            if(!key)
+        keyPressed : function(data){
+            var keyName = data.key;
+            if(!keyName)
                 throw 'key cannot be null';
 
             this.socket.emit('keyPressed', {
                 instrumentName : this.instrumentName,
-                key : key
+                key : keyName
             });
         },
         playKey : function(key){
-            var keyWithName = this.where({key : key})[0];
+            var keyWithName = this.where({keyName : key})[0];
 
             if(keyWithName)
                 keyWithName.trigger('play');

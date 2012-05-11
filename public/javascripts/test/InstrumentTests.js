@@ -191,7 +191,7 @@
     TestCase('InstrumentModel.add(keyModel)', {
         setUp : stubConnectAndSocket,
         tearDown: restoreSocket,
-        "test should cause keyPressed(key) to be called on keyModel's 'keyPressed' event" : function(){
+        "test should cause keyPressed(data) to be called on keyModel's 'keyPressed' event" : function(){
             // setup
             var keyB = new NODIO.KeyModel({keyName : "C22"});
             var instrumentModel = new NODIO.InstrumentModel();
@@ -217,7 +217,7 @@
             var instrumentModel = new NODIO.InstrumentModel();
             // test/expect
             expect(function(){
-                instrumentModel.keyPressed(null);
+                instrumentModel.keyPressed({key : null});
             }).to.throwError();
         },
         "test should emit 'keyPressed' on socket with key name and instrument name" : function(){
@@ -227,7 +227,7 @@
             // need to reset emit in case called in other methods
             this.socket.emit.reset();
             // test
-            instrumentModel.keyPressed('b9');
+            instrumentModel.keyPressed({key : 'b9'});
 
             // expect
             expect(this.socket.emit.calledWith('keyPressed')).to.be(true);
@@ -243,7 +243,7 @@
             var key = 'do';
             // setup
             var instrumentModel = new NODIO.InstrumentModel();
-            instrumentModel.where = sinon.stub().withArgs({key:key}).returns([]);
+            instrumentModel.where = sinon.stub().withArgs({keyName:key}).returns([]);
 
             // test
             expect(function(){
@@ -260,7 +260,7 @@
 
             // stub result of where to return collection with 'first' method stubbed
             // out to return key
-            instrumentModel.where = sinon.stub().withArgs({key : key}).returns(
+            instrumentModel.where = sinon.stub().withArgs({keyName : key}).returns(
                 [expectedFirsKey, {}, {}, {}]
             );
 
