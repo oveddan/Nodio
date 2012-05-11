@@ -41,6 +41,7 @@ var NODIO = NODIO || {};
             var keyName = this.get('keyName');
             if(keyName)
                 this.trigger('keyPressed', {key : keyName});
+            this.trigger('play');
         }
     });
 
@@ -59,7 +60,7 @@ var NODIO = NODIO || {};
         listenForPressedKeys : function(){
             var self = this;
             this.socket.on('keyPressed', function(data){
-               self.keyPressed(data.key);
+               self.playKey(data.key);
             });
         },
         setInstrumentName : function(name){
@@ -77,8 +78,6 @@ var NODIO = NODIO || {};
                 instrumentName : this.instrumentName,
                 key : key
             });
-
-            this.playKey(key);
         },
         playKey : function(key){
             var keyWithName = this.where({key : key})[0];
