@@ -97,6 +97,10 @@ var NODIO = NODIO || {};
             this.model.on('play', function(data){
                 self.play();
             });
+            var model = this.model;
+            this.$el.on('click', function(){
+                model.pressKey();
+            });
             this.sound = KeyView.parseSound($el);
         },
         play : function(){

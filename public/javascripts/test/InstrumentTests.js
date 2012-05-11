@@ -168,7 +168,7 @@
     TestCase('InstrumentModel.listenForPressedKeys()', {
         setUp : stubConnectAndSocket,
         tearDown: restoreSocket,
-        "test should make 'keyPressed' on model be called when socket emits event 'keyPressed'" : function(){
+        "test should make 'keyPressed(key)' on model be called when socket emits event 'keyPressed'" : function(){
             // test
             var instrumentModel = new NODIO.InstrumentModel();
             instrumentModel.keyPressed = sinon.spy();
@@ -193,7 +193,7 @@
     TestCase('InstrumentModel.add(keyModel)', {
         setUp : stubConnectAndSocket,
         tearDown: restoreSocket,
-        "test should cause keyPressed(key) to be called on keyModel's 'on' event" : function(){
+        "test should cause keyPressed(key) to be called on keyModel's 'keyPressed' event" : function(){
             // setup
             var keyB = new NODIO.KeyModel({keyName : "C22"});
             var instrumentModel = new NODIO.InstrumentModel();
@@ -328,6 +328,16 @@
 
             expect(this.keyView.play.calledOnce).to.be(true);
             expect(this.keyView.play.calledOn(this.keyView));
+        },
+        "test should call pressKey on model when list element is clicked" : function(){
+            // setup
+            this.keyView.model.pressKey = sinon.spy();
+            var elementToClick = $(this.element);
+            // test
+            elementToClick.click();
+            // expect
+            expect(this.keyView.model.pressKey.calledOnce).to.be(true);
+            expect(this.keyView.model.pressKey.calledOn(this.keyView.model));
         }
 
     });
@@ -358,6 +368,7 @@
 
     TestCase('KeyView.events', {
        'test should call pressKey() when key button clicked' : function(){
+
        },
        'test when model fires event keyPressed, should call play() on view' : function(){
        }
@@ -375,11 +386,6 @@
 }());
 
 (function(){
-    TestCase('KeyModel.play()', {
-       "test should fire 'play' event" : function(){
-
-       }
-    });
 
     TestCase('KeyModel.pressKey()', {
        "test should fire 'keyPressed' event with key name": function(){
