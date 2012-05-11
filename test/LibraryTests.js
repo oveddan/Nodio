@@ -190,22 +190,22 @@ describe('InstrumentBroadcaster', function(){
         it('should broadcast key in room for instrument', function(){
             // setup
             var socket = {
-                in : sinon.stub()
+                broadcast : {
+                }
             };
 
             var instrumentName = 'saxiphone',
                 key = 'so';
             var emitSpy = sinon.spy();
-            socket.in.withArgs(instrumentName)
-                .returns({
-                    emit : emitSpy
-                });
+            socket.broadcast.to = sinon.stub().withArgs(instrumentName).returns({
+                emit : emitSpy
+            });
 
             // test
             InstrumentBroadcaster.sendKeyPressed(socket, key, instrumentName);
 
             // assert
-            emitSpy.calledWith({key : key}).should.be.ok;
+            emitSpy.calledWith('keyPressed', {key : key}).should.be.ok;
         });
     });
 });

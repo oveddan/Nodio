@@ -6,3 +6,16 @@ body {
 a {
   color: #00B7FF;
 }
+
+ul.instrument {
+    float:left;
+    background: url("/images/piano_keys.png") top left no-repeat;
+}
+
+ul.instrument li {
+    float:left;
+    width: 71px;
+    border: black 1px hidden;
+    height: 313px;
+}
+

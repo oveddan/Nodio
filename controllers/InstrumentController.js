@@ -4,7 +4,7 @@ var InstrumentController = function(callback){
 };
 
 InstrumentController.viewInstrument = function(instrumentName, res){
-    res.render('Instrument', {instrumentName : instrumentName});
+    res.render('instrument', {instrumentName : instrumentName});
 };
 
 module.exports = InstrumentController;

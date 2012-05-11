@@ -72,7 +72,7 @@ describe('InstrumentController', function(){
             InstrumentController.viewInstrument('guitar', res);
 
             res.render.calledOnce.should.be.ok;
-            res.render.firstCall.args[0].should.equal('Instrument');
+            res.render.firstCall.args[0].should.equal('instrument');
         });
         it('should return model with instrument name', function(){
             var res = {

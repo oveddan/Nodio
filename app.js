@@ -29,7 +29,7 @@ app.configure('production', function(){
 });
 
 var broadcaster = new InstrumentBroadcaster(app);
-broadcaster.listenForRequestsToHearInstrument();
+broadcaster.listen();
 
 // Routes
 routes.registerControllerRoutes(app, broadcaster);
