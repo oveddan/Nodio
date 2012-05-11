@@ -101,9 +101,11 @@ var NODIO = NODIO || {};
             this.$el.on('click', function(){
                 model.pressKey();
             });
-            this.sound = KeyView.parseSound($el);
+            this.audioElement = KeyView.parseSound($el);
         },
         play : function(){
+            if(this.audioElement)
+                this.audioElement.play();
         }
     });
 
@@ -112,7 +114,7 @@ var NODIO = NODIO || {};
     };
 
     KeyView.parseSound = function($el){
-        return $el.find('audio');
+        return $el.find('audio')[0];
     }
 
 

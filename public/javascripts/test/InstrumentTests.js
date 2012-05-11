@@ -319,8 +319,8 @@
             expect(this.keyView.model.get('keyName')).to.be('do');
         },
         "test should grab audio element in view and assign it to 'sound'": function(){
-            expect(this.keyView.sound != null).to.be(true);
-            expect(this.keyView.sound).to.eql($(this.element).find('audio'));
+            expect(this.keyView.audioElement != null).to.be(true);
+            expect(this.keyView.audioElement).to.eql($(this.element).find('audio')[0]);
         },
         "test should call play() when model triggers 'play'": function(){
             this.keyView.play = sinon.spy();
@@ -332,19 +332,25 @@
         "test should call pressKey on model when list element is clicked" : function(){
             // setup
             this.keyView.model.pressKey = sinon.spy();
-            var elementToClick = $(this.element);
+            var $elementToClick = $(this.element);
             // test
-            elementToClick.click();
+            $elementToClick.click();
             // expect
             expect(this.keyView.model.pressKey.calledOnce).to.be(true);
             expect(this.keyView.model.pressKey.calledOn(this.keyView.model));
         }
-
     });
     TestCase("KeyView({el : element}) - bad html", {
         "test should not throw error if cannot find key name" : function(){
             expect(function(){
                 var keyView = new NODIO.KeyView('<span />');
+            }).to.not.throwException();
+        },
+        "test should not throw error if cannot find audio" : function(){
+            expect(function(){
+                var $element = $("<li class='key'>" +
+                   "</li>");
+                var keyView = new NODIO.KeyView($element);
             }).to.not.throwException();
         }
     });
@@ -366,21 +372,19 @@
         }
     });
 
-    TestCase('KeyView.events', {
-       'test should call pressKey() when key button clicked' : function(){
-
-       },
-       'test when model fires event keyPressed, should call play() on view' : function(){
-       }
-    });
-
-    TestCase('KeyView.pressKey()' ,{
-       'test should fire keyPressed(this.keyName) on model' : function(){
-       }
-    });
-
     TestCase('KeyView.play()', {
-        "test should call play() on 'sound'" : function(){
+        "test should call play() on 'audioElement'" : function(){
+            // setup
+            /*:DOC element = <li class='key' data-name='do' >
+             <audio src='/do.mp3' type='audio/mp3' />
+             </li>
+             */
+            var keyView = new NODIO.KeyView({el : this.element});
+            keyView.audioElement.play = sinon.spy();
+            // test
+            keyView.play();
+            // expect
+            keyView.audioElement.play.called;
         }
     });
 }());
