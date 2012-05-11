@@ -393,6 +393,18 @@
 
     TestCase('KeyModel.pressKey()', {
        "test should fire 'keyPressed' event with key name": function(){
+           // setup
+           var keyModel = new NODIO.KeyModel({
+               keyName : 'c7'
+           });
+
+           keyModel.trigger = sinon.spy();
+           // test
+           keyModel.pressKey();
+           // expect
+           expect(keyModel.trigger.calledOnce).to.be(true);
+           expect(keyModel.trigger.firstCall.args[0]).to.be('keyPressed');
+           expect(keyModel.trigger.firstCall.args[1]).to.eql({key : keyModel.get('keyName')});
        }
     });
 }());

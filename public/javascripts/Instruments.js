@@ -37,6 +37,11 @@ var NODIO = NODIO || {};
     };
 
     NODIO.KeyModel = Backbone.Model.extend({
+        pressKey : function(){
+            var keyName = this.get('keyName');
+            if(keyName)
+                this.trigger('keyPressed', {key : keyName});
+        }
     });
 
     NODIO.InstrumentModel = Backbone.Collection.extend({
