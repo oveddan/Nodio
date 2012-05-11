@@ -37,10 +37,16 @@ var NODIO = NODIO || {};
     };
 
     NODIO.KeyModel = Backbone.Model.extend({
+        initialize: function(){
+            this.on('play', function(){
+                console.log(this.get('keyName'));
+            })
+        },
         pressKey : function(){
             var keyName = this.get('keyName');
             if(keyName)
                 this.trigger('keyPressed', {key : keyName});
+            this.trigger('play');
         }
     });
 
@@ -59,7 +65,7 @@ var NODIO = NODIO || {};
         listenForPressedKeys : function(){
             var self = this;
             this.socket.on('keyPressed', function(data){
-               self.keyPressed(data.key);
+               self.playKey(data.key);
             });
         },
         setInstrumentName : function(name){
@@ -70,19 +76,17 @@ var NODIO = NODIO || {};
             return this.instrumentName;
         },
         keyPressed : function(data){
-            if(!data.key)
+            var keyName = data.key;
+            if(!keyName)
                 throw 'key cannot be null';
 
-            var key = data.key;
             this.socket.emit('keyPressed', {
                 instrumentName : this.instrumentName,
-                key : key
+                key : keyName
             });
-
-            this.playKey(key);
         },
         playKey : function(key){
-            var keyWithName = this.where({key : key})[0];
+            var keyWithName = this.where({keyName : key})[0];
 
             if(keyWithName)
                 keyWithName.trigger('play');
@@ -122,6 +126,11 @@ var NODIO = NODIO || {};
         return $el.find('audio')[0];
     }
 
+    $(document).ready(function() {
+        var instrumentView = new InstrumentView(
+            {el : $('ul.instrument')[0]}
+        );
+    });
 
 }(jQuery, Backbone, io));
 
