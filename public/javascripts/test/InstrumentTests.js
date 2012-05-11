@@ -168,7 +168,7 @@
     TestCase('InstrumentModel.listenForPressedKeys()', {
         setUp : stubConnectAndSocket,
         tearDown: restoreSocket,
-        "test should make 'keyPressed(key)' on model be called when socket emits event 'keyPressed'" : function(){
+        "test should make 'pressKey(key)' on model be called when socket emits event 'keyPressed'" : function(){
             // test
             var instrumentModel = new NODIO.InstrumentModel();
             instrumentModel.keyPressed = sinon.spy();
@@ -183,10 +183,8 @@
 
             // assert
             expect(this.socket.on.firstCall.args[0]).to.be('keyPressed');
-            expect(instrumentModel.keyPressed.calledWith(testKeyPress.key)).to.be(true);
-            expect(instrumentModel.keyPressed.calledOn(instrumentModel)).to.be(true);
-
-
+            expect(instrumentModel.pressKey.calledWith(testKeyPress.key)).to.be(true);
+            expect(instrumentModel.pressKey.calledOn(instrumentModel)).to.be(true);
         }
     });
 
@@ -211,7 +209,7 @@
         }
     });
 
-    TestCase('InstrumentModel.keyPressed({key : keyName})', {
+    TestCase('InstrumentModel.keyPressed(key)', {
         setUp : stubConnectAndSocket,
         tearDown: restoreSocket,
         "test should raise error if key argument is null": function(){
@@ -219,7 +217,7 @@
             var instrumentModel = new NODIO.InstrumentModel();
             // test/expect
             expect(function(){
-                instrumentModel.keyPressed({key : null});
+                instrumentModel.keyPressed(null);
             }).to.throwError();
         },
         "test should emit 'keyPressed' on socket with key name and instrument name" : function(){
@@ -229,7 +227,7 @@
             // need to reset emit in case called in other methods
             this.socket.emit.reset();
             // test
-            instrumentModel.keyPressed({key : 'b9'});
+            instrumentModel.keyPressed('b9');
 
             // expect
             expect(this.socket.emit.calledWith('keyPressed')).to.be(true);
@@ -246,14 +244,18 @@
             instrumentModel.playKey = sinon.spy();
 
             // test
-            instrumentModel.keyPressed({key: 'g#'});
+            instrumentModel.keyPressed('g#');
 
             // expect
             expect(instrumentModel.playKey.calledWith('g#')).to.be(true);
+
+            // KILL THIS TEST
+
+            expect('not implemented').to.be.false;
         }
     });
 
-    TestCase("InstrumentModel.playKey(name)", {
+    TestCase("InstrumentModel.pressKey(name)", {
         'test key does not exist should not raise error': function(){
             var key = 'do';
             // setup
@@ -265,7 +267,7 @@
                 instrumentModel.playKey(key);
             }).to.not.throwException();
         },
-        "test should find key with name and trigger 'play' on it" : function(){
+        "test should find key with name and call pressKey on it" : function(){
             // setup
             var instrumentModel = new NODIO.InstrumentModel();
 
@@ -284,6 +286,8 @@
 
             // expect
             expect(expectedFirsKey.trigger.calledWith('play')).to.be(true);
+
+            expect('not implemented').to.be(false);
         }
     });
 
@@ -405,6 +409,10 @@
            expect(keyModel.trigger.calledOnce).to.be(true);
            expect(keyModel.trigger.firstCall.args[0]).to.be('keyPressed');
            expect(keyModel.trigger.firstCall.args[1]).to.eql({key : keyModel.get('keyName')});
-       }
+       },
+        "test should fire 'play' event" : function(){
+
+            expect('not implemented').to.be(false);
+        }
     });
 }());

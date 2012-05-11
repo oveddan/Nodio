@@ -69,11 +69,10 @@ var NODIO = NODIO || {};
         getInstrumentName: function(){
             return this.instrumentName;
         },
-        keyPressed : function(data){
-            if(!data.key)
+        keyPressed : function(key){
+            if(!key)
                 throw 'key cannot be null';
 
-            var key = data.key;
             this.socket.emit('keyPressed', {
                 instrumentName : this.instrumentName,
                 key : key
@@ -122,6 +121,11 @@ var NODIO = NODIO || {};
         return $el.find('audio')[0];
     }
 
+    $(document).ready(function() {
+        var instrumentView = new InstrumentView(
+            {el : $('ul.instrument')[0]}
+        );
+    });
 
 }(jQuery, Backbone, io));
 
