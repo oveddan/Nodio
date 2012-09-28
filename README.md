@@ -10,7 +10,7 @@
 
   Start server:
 
-    $ npm start
+    $ node app.js
 
   Connect to an instrument by opening http://localhost:3000/{instrumentName}
 
