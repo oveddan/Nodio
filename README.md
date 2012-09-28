@@ -13,6 +13,8 @@
     $ node app.js
 
   Connect to an instrument by opening http://localhost:3000/{instrumentName}
+  Open it in another browser, connected to that host and port, and press a key - it will be played
+  in all browsers connected to that instrument.
 
 ## Running tests
 
