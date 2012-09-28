@@ -1,6 +1,6 @@
-# gitBuildForwarder [![Build Status](https://secure.travis-ci.org/oveddan/gitBuildForwarder.png)](http://travis-ci.org/oveddan/gitBuildForwarder)
+# Nodio 
 
-  Triggers branch-specific builds on continuous integration servers when corresponding branches in a git repository are committed to.
+  Chat room for a musical instrument - let's people play a live instrument for each other in real time over the web, in any browser.
 
 ## Overview
 
@@ -12,7 +12,15 @@
 
 ## Setup
 
-The best way to see how to setup an app is to look at the integration tests.
+  Install dependencies:
+  
+    $ npm install
+
+  Start server:
+
+    $ npm start
+
+  Connect to an instrument by opening http://localhost:3000/{instrumentName}
 
 ## Running tests
 
@@ -23,10 +31,6 @@ The best way to see how to setup an app is to look at the integration tests.
   Run the tests:
 
     $ make test
-
-  Run the integration tests:
-
-  	$ make testintegration
 
 ## License 
 
