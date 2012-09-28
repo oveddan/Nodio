@@ -1,6 +1,6 @@
 # Nodio 
 
-  Chat room for a musical instrument - let's people play a live instrument for each other in real time over the web, in any browser.
+  Chat room for a musical instrument - it lets people play a live instrument for each other in real time over the web, in any browser.
 
 ## Setup
 
@@ -13,8 +13,7 @@
     $ node app.js
 
   Connect to an instrument by opening http://localhost:3000/{instrumentName}
-  Open it in another browser, connected to that host and port, and press a key - it will be played
-  in all browsers connected to that instrument.
+  Open it in another browser, connected to that host and port, and press a key - it will be played in real-time, in all browsers connected to that instrument.
 
 ## Running tests
 
